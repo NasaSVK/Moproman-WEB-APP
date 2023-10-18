@@ -35,10 +35,10 @@ export default {
     chartOptions: {
       type: Object,
       default: { responsive: true, plugins: {
-            title: {
-                display: true,
-                text: 'Custom Chart Title'
-            }
+            // title: {
+            //     display: true,
+            //     text: 'Custom Chart Title'
+            // }
         } }
     }
   }
