@@ -3,9 +3,30 @@ import VueDatePicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
 import moment from 'moment'
 </script>
-
+<!-- <div>safafs</div> -->
 <template>
-    <h1>PEC B</h1>
+  <!-- <div>Picked: {{ picked }}</div> -->
+    <!-- <h1>PEC B</h1>     -->
+    <div class="form-check">
+  <input class="form-check-input"  type="radio" id="rdbTzden" value="WEEK" v-model="picked">
+  <label class="form-check-label" for="rdbTzden">
+    TYZDENNY
+  </label>
+</div>
+<div class="form-check">
+  <input class="form-check-input" type="radio" id="rdbMesiac" value="MONTH" v-model="picked">
+  <label class="form-check-label" for="rdbMesiac">
+    MASACNY
+  </label>
+</div>
+<div class="form-check">
+  <input class="form-check-input" type="radio" id="rdbCustom" value="CUSTOM" v-model="picked">
+  <label class="form-check-label" for="rdbCustom">
+    VLASTNY
+  </label>
+</div>
+    
+    
     <VueDatePicker class="picker" v-model="tOD"></VueDatePicker>
     <VueDatePicker class="picker" v-model="tDO"></VueDatePicker>
     <button v-on:click="dajDataAPI">ZOBRAZ DATA</button>
@@ -28,6 +49,7 @@ import BarChart from './components/BarChart.vue'
 import LineChart from './components/LineChart.vue'
 import LineChartAPI from './components/LineChartAPI.vue'
 import axios from 'axios'
+import * as Helpers from "./helpers"
 
 
 export default {
@@ -35,12 +57,13 @@ export default {
   components: { MyBarChart, BarChart, LineChart, LineChartAPI, VueDatePicker },
   methods:{
     redukujPocet(){
-            this.getData();
-            console.log("CLICK");
             this.myDataNapatie = {labels:[1,2,3,4], datasets:[{ data: [20,10,0,20] }]}        
             console.log(this.myDataNapatie);              
         },
     dajDataAPI(){
+
+        this.inicializujOdDo();
+
         var URL = "https://192.168.45.1:7117/record/interval";    
         // var pOD = this.parsujDatum(this.tOD);
         // var pDO = this.parsujDatum(this.tDO);
@@ -62,7 +85,8 @@ export default {
           
             //console.log(response.data.map(rec=>rec.napatie));
             let PomLabels  =   response.data.map(rec=>this.parsujDatumForLabels(rec.dateTime));
-            let PomData  =   response.data.map(rec=>rec.napatie);
+            
+            let PomData  =   response.data.map(rec=>rec.napatie);                                    
             this.myDataNapatie = {labels:PomLabels, datasets:[{data:PomData, label: "NAPATIE", backgroundColor: "#f87979", borderColor: "#f87979"}]}
 
             PomData  =   response.data.map(rec=>rec.prud);
@@ -76,12 +100,8 @@ export default {
         .catch((error) => {      
             console.error(error);
         });},
+    
 
-    
-    
-    getData() {
-      console.log(this.tOD + "  " + this.tDO + " " + this.parsujDatum(this.tOD) + " " + this.parsujDatum(this.tDO));
-    },
     parsujDatum(pDatum) {
 
       return moment(pDatum).format("YYYY-MM-DDTHH:mm:ss");
@@ -89,13 +109,21 @@ export default {
     },
     parsujDatumForLabels(pDatum) {
       return moment(pDatum).format("DD.MM. - HH:mm:ss");
+    },
+
+    inicializujOdDo(){
+        switch (this.picked){
+            case('WEEK'): this.DO = new Date(); this.tOD = Helpers.WeekBack(this.DO);break;
+            case('MONTH'):this.DO = new Date(); this.tOD = Helpers.MonthBack(this.DO);break;
+            case('CUSTOM'): this.DO = this.DO; this.tOD = this.tOD; break;
+        }
     }
-  
-    
   },
   data() {
     const self = this;
     return {      
+      picked:"WEEK",
+    
       tDO: new Date(),
       //tOD: new Date() - 30 * 60 * 1000,
       //tOD: new Date().setMinutes(new Date().getMinutes() - 30),      
