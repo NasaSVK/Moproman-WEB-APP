@@ -27,11 +27,14 @@ import moment from 'moment'
 </div>
     
     
-    <VueDatePicker class="picker" v-model="tOD"></VueDatePicker>
-    <VueDatePicker class="picker" v-model="tDO"></VueDatePicker>
+    <VueDatePicker class="picker" v-model="tOD">AHOJ1</VueDatePicker>
+    <VueDatePicker class="picker" v-model="tDO">AHOJ2</VueDatePicker>
     <button v-on:click="dajDataAPI">ZOBRAZ DATA</button>
     
     
+    <MyBarChart :chartData=this.myDataVykon></MyBarChart>
+    <MyBarChart :chartData=this.myDataSpotreba></MyBarChart>
+    <BarChart :chartData="this.myDataSpotrebaBAR"></BarChart>
     <MyBarChart @click="redukujPocet" :chartData=this.myDataNapatie ></MyBarChart>
     <MyBarChart :chartData=this.myDataPrud ></MyBarChart>
     <MyBarChart :chartData=this.myDataVoda ></MyBarChart>
@@ -82,19 +85,37 @@ export default {
         })
         
         .then((response) => {   
-          
-            //console.log(response.data.map(rec=>rec.napatie));
-            let PomLabels  =   response.data.map(rec=>this.parsujDatumForLabels(rec.dateTime));
+
+            Helpers.DodajSpotrebu(response.data);
+            console.log("DATA SO SPOTREBOU: {0}", response.data);
+
+            let PomLabels = ["ZMENA-1", "ZMENA-2", "ZMENA-3"]
+            let PomData  =  PomLabels.map(zmenaa=>{
+              var total = 0;
+              response.data.forEach(rec=>(rec.zmena == zmenaa) && (total += rec.spotreba));              
+              return total;
+            })            
+            console.log("total:{0}",PomData);                        
+            this.myDataSpotrebaBAR = {labels:PomLabels, datasets:[{data:PomData, label: "SPOTREBABAR", backgroundColor: "#ffbf00"}]}
             
-            let PomData  =   response.data.map(rec=>rec.napatie);                                    
+            let reducedData = Helpers.RedukujPocetHodnot(response.data,200);
+            PomLabels  =   reducedData.map(rec=>this.parsujDatumForLabels(rec.dateTime));
+                        
+            PomData  =  reducedData.map(rec=>rec.mojvykon);                                    
+            this.myDataVykon = {labels:PomLabels, datasets:[{data:PomData, label: "VYKON", backgroundColor: "#ffeb3b"}]}
+            
+            PomData  =  reducedData.map(rec=>rec.spotreba);                                    
+            this.myDataSpotreba = {labels:PomLabels, datasets:[{data:PomData, label: "SPOTREBA", backgroundColor: "#ffbf00"}]}            
+
+            PomData  =  reducedData.map(rec=>rec.napatie);                                    
             this.myDataNapatie = {labels:PomLabels, datasets:[{data:PomData, label: "NAPATIE", backgroundColor: "#f87979", borderColor: "#f87979"}]}
 
-            PomData  =   response.data.map(rec=>rec.prud);
+            PomData  =  reducedData.map(rec=>rec.prud);
             this.myDataPrud = {labels:PomLabels, datasets:[{data:PomData, label: "PRUD", backgroundColor: "#0066ff"}]}
                       
-            PomData  =   response.data.map(rec=>rec.tVodaVstup);
-            let PomData1  =   response.data.map(rec=>rec.tVodaVystup);
-            this.myDataVoda = {labels:PomLabels, datasets:[{data:PomData, label: "VODA VSTUP", backgroundColor: "#9933ff"}, {data:PomData1, label: "VODA VYSTUP", backgroundColor: "#ff6600"}]}
+            PomData  =  reducedData.map(rec=>rec.tVodaVstup);
+            let PomData1  =  reducedData.map(rec=>rec.tVodaVystup);
+            this.myDataVoda = {labels:PomLabels, datasets:[{data:PomData, label: "VODA VSTUP", backgroundColor: "#9933ff"}, {data:PomData1, label: "VODA VYSTUP", backgroundColor: "#ff6600"}]}           
 
         })
         .catch((error) => {      
@@ -129,6 +150,20 @@ export default {
       //tOD: new Date().setMinutes(new Date().getMinutes() - 30),      
       tOD: new Date().setHours(new Date().getHours() - 4),      
       
+      
+      myDataVykon: {
+        labels: [0],
+        datasets: [ { data: [0], label: "VYKON", backgroundColor: "#0066ff" }]
+      },
+      myDataSpotreba: {
+        labels: [0],
+        datasets: [ { data: [0], label: "SPOTREBA", backgroundColor: "#ffbf00" }]
+      },
+      
+      myDataSpotrebaBAR: {
+        labels: [0],
+        datasets: [ { data: [0], label: "SPOTREBA_BAR", backgroundColor: "#00ff00" }]
+      },
       myDataNapatie: {
          //labels: [ 'January', 'February', 'March' ],
          //datasets: [ { data: [40, 20, 12] } ]

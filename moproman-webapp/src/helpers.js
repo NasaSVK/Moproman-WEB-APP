@@ -31,12 +31,12 @@ export var RedukujPocetHodnot = (pPole,pMinPocet = 100)=>{
         result.push(hodnota);
 });
 
-console.log("REDUKOVANE POLE: "+ result);
+//console.log("REDUKOVANE POLE: "+ result);
 
 if (MAX_INDEX%PER != 0)
     result.push(pPole[MAX_INDEX]); //vlozi do redukovaneho pola posledny prvok pola povodneho
-    console.log("FINALNE POLE: "+ result);
-    console.log("POCET PRVKOV: "+ result.length);   
+    //console.log("FINALNE POLE: "+ result);
+    //console.log("POCET PRVKOV: "+ result.length);   
     return result;
 }
 
@@ -57,25 +57,47 @@ export var DajSpotrebu = (pNapatie,pPrud,pCas)=>{
 export var DodajSpotrebu = (pRecords)=>{
     
     var t0 = new Date();
+    var u0=0, i0=0;
     
-    for(let i = 0;i<pRecords; i++){
+    for(let i = 0; i<pRecords.length; i++){        
+        
+            let du = Math.abs(pRecords[i].napatie);
+            let di = Math.abs(pRecords[i].prud);            
+            //pRecords[i].spotreba = (du*di*dt/1000).toFixed(2);
+            pRecords[i].mojvykon = (du*di).toFixed(2);
+            //console.log((pRecords[i].spotreba));
+            //console.log("SPOTREBA:{0},{1},{2},{3} \n",pRecords[i].spotreba,du,di,dt); 
+
+            //t0 = new Date(pRecords[i].dateTime);
+            u0 = pRecords[i].napatie;
+            i0 = pRecords[i].prud;        
+    }
+
+    for(let i = 0; i<pRecords.length; i++){
+        
         if(i == 0) {
-            pRecords[i].vykon = 0;
-            t0 = pRecords[i].date_time;
+            pRecords[i].spotreba = 0;
+            t0 = new Date(pRecords[i].dateTime);
+            //console.log("t0:{0}",pRecords[i].dateTime);
             u0 = pRecords[i].napatie;
             i0 = pRecords[i].prud;
         }
         else
         {
-            let dt = pRecords[i].date_time - t0;
-            let du = (pRecords[i].napatie - u0)/2;
-            let di = (pRecords[i].prud - i0)/2;
+            let dt = new Date(pRecords[i].dateTime) - t0;
+            let du = Math.abs(pRecords[i].napatie + u0)/2;
+            let di = Math.abs(pRecords[i].prud + i0)/2;            
+            //pRecords[i].spotreba = parseFloat((du*di*dt/1000).toFixed(2));
+            pRecords[i].spotreba = Math.round(du*di*dt/10)/100;
+            //pRecords[i].spotreba = ((du*di*dt/1000).toFixed(2));
             
-            pRecords[i].vykon = du*di*dt;
+            //console.log((pRecords[i].spotreba));
+            //console.log("SPOTREBA:{0},{1},{2},{3} \n",pRecords[i].spotreba,du,di,dt); 
 
-            d0 = pRecords[i].date_time;
-            d0 = pRecords[i].napatie;
-            d0 = pRecords[i].prud;
+            t0 = new Date(pRecords[i].dateTime);
+            u0 = pRecords[i].napatie;
+            i0 = pRecords[i].prud;
         }
-    }   
+    }
+      
 }

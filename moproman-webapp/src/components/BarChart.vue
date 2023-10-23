@@ -15,10 +15,30 @@ export default {
         return {
             chartData: {
                 labels: ['January', 'February', 'March'],
-                datasets: [{ data: [40, 20, 12] }]
+                datasets: [{ data: [40, 20, 12], backgroundColor: "#ff3399", label: "SPOTREBA ZMIEN" }]
             },
             chartOptions: {
                 responsive: true
+            }
+        }
+    },
+
+    props: {
+        chartData: {
+            default: {
+                labels: ['January', 'February', 'March'],
+                datasets: [{ data: [40, 20, 12], backgroundColor: "#00bfff", label: "SPOTREBABAR" }]
+            }
+        },
+        chartOptions: {
+            type: Object,
+            default: {
+                responsive: true, plugins: {
+                    // title: {
+                    //     display: true,
+                    //     text: 'Custom Chart Title'
+                    // }
+                }
             }
         }
     }
