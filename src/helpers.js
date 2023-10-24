@@ -1,5 +1,3 @@
-export const name = "square";
-
 export function WeekBack(pDatum) {
   
     let date = new Date();
