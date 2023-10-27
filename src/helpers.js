@@ -1,3 +1,5 @@
+const DELTA = 5000; //[ms] predpokladany casovy interval medzi dvomi meraniami
+
 export function WeekBack(pDatum) {
 
     let date = new Date();
@@ -77,6 +79,7 @@ export var DodajSpotrebu = (pRecords) => {
 
         pRecords[i].mojvykon = (du * di).toFixed(2);
 
+
         u0 = pRecords[i].napatie;
         i0 = pRecords[i].prud;
     }
@@ -95,11 +98,11 @@ export var DodajSpotrebu = (pRecords) => {
             let dt = new Date(pRecords[i].dateTime) - t0;
             let du = Math.abs(pRecords[i].napatie + u0) / 2;
             let di = Math.abs(pRecords[i].prud + i0) / 2;
+            if (i == 1) pRecords[0].spotreba = u0 * i0 * dt / 1000;
+            pRecords[i].spotreba = du * di * dt / 1000;
             //pRecords[i].spotreba = parseFloat((du*di*dt/1000).toFixed(2));
             //pRecords[i].spotreba = Math.round(du * di * dt / 10) / 100;
-            pRecords[i].spotreba = du * di * dt / 1000;
             //pRecords[i].spotreba = ((du*di*dt/1000).toFixed(2));
-
             //console.log((pRecords[i].spotreba));
             //console.log("SPOTREBA:{0},{1},{2},{3} \n",pRecords[i].spotreba,du,di,dt);
 

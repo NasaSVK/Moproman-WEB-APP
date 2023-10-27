@@ -27,8 +27,8 @@ import moment from 'moment'
   </div>
 
 
-  <VueDatePicker class="picker" v-model="tOD">AHOJ1</VueDatePicker>
-  <VueDatePicker class="picker" v-model="tDO">AHOJ2</VueDatePicker>
+  <VueDatePicker class="picker" v-model="dpOD">AHOJ1</VueDatePicker>
+  <VueDatePicker class="picker" v-model="dpDO">AHOJ2</VueDatePicker>
   <button v-on:click="dajDataAPI">ZOBRAZ DATA</button>
   <div>{{ this.maxTime }}</div>
   <MyBarChart :chartData=this.myDataVykon :chartOptions=this.myOptionsTimeComp></MyBarChart>
@@ -37,6 +37,7 @@ import moment from 'moment'
   <MyBarChart @click="redukujPocet" :chartData=this.myDataNapatie :chartOptions=this.myOptionsTimeComp></MyBarChart>
   <MyBarChart :chartData=this.myDataPrud :chartOptions=this.myOptionsTimeComp></MyBarChart>
   <MyBarChart :chartData=this.myDataVoda :chartOptions=this.myOptionsTimeComp></MyBarChart>
+  <MyBarChart :chartData=this.myDataTlak :chartOptions=this.myOptionsTimeComp></MyBarChart>
 </template>
 
 <script>
@@ -74,6 +75,7 @@ export default {
         .then((response) => {
 
           // SPOTREBA ZMIEN
+          // --------------------------------------------------------------------------------------------------------------------------------------
           Helpers.DodajSpotrebu(response.data);
           console.log("DATA SO SPOTREBOU: {0}", response.data);
 
@@ -85,7 +87,7 @@ export default {
           })
           //console.log("total:{0}", PomData);
           this.myDataSpotrebaBAR = { labels: PomLabels, datasets: [{ data: PomData, label: "SPOTREBA ZMIEN", backgroundColor: "#993333" }] }
-
+          // --------------------------------------------------------------------------------------------------------------------------------------
 
           //CASOVA OS
           let reducedData = Helpers.RedukujPocetHodnot(response.data, 200);
@@ -94,24 +96,28 @@ export default {
 
           //VYKON
           PomData = reducedData.map(rec => rec.mojvykon);
-          this.myDataVykon = { labels: PomLabels, datasets: [{ data: PomData, label: "VYKON", backgroundColor: "#33cc33" }] }
+          this.myDataVykon = { labels: PomLabels, datasets: [{ data: PomData, label: "VYKON [W]", backgroundColor: "#33cc33" }] }
 
           //SPOTREBA
           PomData = reducedData.map(rec => rec.spotreba);
-          this.myDataSpotreba = { labels: PomLabels, datasets: [{ data: PomData, label: "SPOTREBA", backgroundColor: "#ffbf00" }] }
+          this.myDataSpotreba = { labels: PomLabels, datasets: [{ data: PomData, label: "SPOTREBA [kWh]", backgroundColor: "#ffbf00" }] }
 
           //NAPATIE
           PomData = reducedData.map(rec => rec.napatie);
-          this.myDataNapatie = { labels: PomLabels, datasets: [{ data: PomData, label: "NAPATIE", backgroundColor: "#f87979", borderColor: "#f87979" }] }
+          this.myDataNapatie = { labels: PomLabels, datasets: [{ data: PomData, label: "NAPATIE [V]", backgroundColor: "#f87979", borderColor: "#f87979" }] }
 
           //PRUD
           PomData = reducedData.map(rec => rec.prud);
-          this.myDataPrud = { labels: PomLabels, datasets: [{ data: PomData, label: "PRUD", backgroundColor: "#0066ff" }] }
+          this.myDataPrud = { labels: PomLabels, datasets: [{ data: PomData, label: "PRUD [A]", backgroundColor: "#0066ff" }] }
 
           //TEPLOTA VODY
           PomData = reducedData.map(rec => rec.tVodaVstup);
           let PomData1 = reducedData.map(rec => rec.tVodaVystup);
-          this.myDataVoda = { labels: PomLabels, datasets: [{ data: PomData, label: "VODA VSTUP", backgroundColor: "#9933ff" }, { data: PomData1, label: "VODA VYSTUP", backgroundColor: "#ff6600" }] }
+          this.myDataVoda = { labels: PomLabels, datasets: [{ data: PomData, label: "VODA VSTUP [°C]", backgroundColor: "#9933ff" }, { data: PomData1, label: "VODA VYSTUP [°C]", backgroundColor: "#ff6600" }] }
+
+          //TLAK
+          PomData = reducedData.map(rec => rec.tlak);
+          this.myDataTlak = { labels: PomLabels, datasets: [{ data: PomData, label: "TLAK VODY [°C]", backgroundColor: "#000000" }] }
 
         })
         .catch((error) => {
@@ -131,9 +137,9 @@ export default {
 
     inicializujOdDo() {
       switch (this.picked) {
-        case ('WEEK'): this.DO = new Date(); this.tOD = Helpers.WeekBack(this.DO); break;
-        case ('MONTH'): this.DO = new Date(); this.tOD = Helpers.MonthBack(this.DO); break;
-        case ('CUSTOM'): this.DO = this.DO; this.tOD = this.tOD; break;
+        case ('WEEK'): this.tDO = new Date(); this.tOD = Helpers.WeekBack(this.tDO); break;
+        case ('MONTH'): this.tDO = new Date(); this.tOD = Helpers.MonthBack(this.tDO); break;
+        case ('CUSTOM'): this.tDO = this.dpDO; this.tOD = this.dpOD; break;
       }
     }
   },
@@ -163,10 +169,13 @@ export default {
     return {
       picked: "CUSTOM",
 
-      tDO: new Date(),
       //tOD: new Date() - 30 * 60 * 1000, //odcitavaju sa MINUTY
       //tOD: new Date().setMinutes(new Date().getMinutes() - 30),
-      tOD: new Date().setHours(new Date().getHours() - 4),
+      tDO: new Date(),
+      tOD: new Date(),
+
+      dpDO: new Date(),
+      dpOD: new Date().setHours(new Date().getHours() - 24),
 
       TimeBoundary: { minTime: "1970-01-01T00:00:00", maxTime: "1970-01-01T02:00:00" },
 
@@ -208,6 +217,10 @@ export default {
       myDataPrud: {
         labels: [0],
         datasets: [{ data: [0], label: "PRUD [A]", backgroundColor: "#0066ff" }]
+      },
+      myDataTlak: {
+        labels: [0],
+        datasets: [{ data: [0], label: "TLAK [Pa]", backgroundColor: "#000000" }]
       },
       myDataVoda: {
         labels: [0],
