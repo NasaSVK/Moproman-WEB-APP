@@ -53,10 +53,6 @@ export default {
   name: 'App',
   components: { MyBarChart, BarChart, LineChart, LineChartAPI, VueDatePicker },
   methods: {
-    // redukujPocet() {
-    //   this.myDataNapatie = { labels: [1, 2, 3, 4], datasets: [{ data: [20, 10, 0, 20] }] }
-    //   console.log(this.myDataNapatie);
-    // },
     dajDataAPI() {
 
       this.inicializujOdDo();
