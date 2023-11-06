@@ -1,5 +1,11 @@
-// import './assets/main.css'
+//import './assets/main.css'
 import "bootstrap/dist/css/bootstrap.css"
+import "bootstrap/dist/js/bootstrap.js"
+//import * as bootstrap from 'bootstrap'
+//import "bootstrap/js/dist/popover.js"
+//import "bootstrap"
+import { Popover } from 'bootstrap';
+
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
@@ -10,4 +16,8 @@ app.use(router)
 
 app.mount('#app')
 
-import "bootstrap/dist/js/bootstrap.js" 
+// Create an example popover
+document.querySelectorAll('[data-bs-toggle="popover"]')
+    .forEach(popover => {
+        new Popover(popover)
+    })
