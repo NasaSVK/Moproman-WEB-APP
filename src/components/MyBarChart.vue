@@ -1,13 +1,9 @@
-<scrip setup>
-
-</scrip>
-
 <template>
-  <Line :data="chartData" :options="chartOptions" />
+  <Line id="my-chart-id1" :data="chartData" :options="chartOptions" />
 </template>
 
 <script>
-import { Chart, Line } from 'vue-chartjs'
+import { Line } from 'vue-chartjs'
 import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale, TimeScale } from 'chart.js'
 import 'chartjs-adapter-moment';
 
@@ -61,4 +57,5 @@ export default {
   }
 }
 </script>
+<style></style>
 

@@ -88,17 +88,16 @@ export var DodajSpotrebu = (pRecords) => {
     for (let i = 0; i < pRecords.length; i++) {
         let dt = DELTA;
         if (i == 0) {
-            //pRecords[i].spotreba = u0 * i0 * dt / 1000;;
-            //console.log("t0:{0}",pRecords[i].dateTime);
             u0 = pRecords[i].napatie;
             i0 = pRecords[i].prud;
-            pRecords[i].spotreba = u0 * i0 * dt / 1000;;
+            pRecords[i].spotreba = u0 * i0 * dt / 1000;
+            pRecords[i].spotreba = Number.parseFloat((u0 * i0 * dt / 1000).toFixed(2));
         }
         else {
             let du = Math.abs(pRecords[i].napatie + u0) / 2;
             let di = Math.abs(pRecords[i].prud + i0) / 2;
             pRecords[i].spotreba = du * di * dt / 1000;
-            //pRecords[i].spotreba = parseFloat((du*di*dt/1000).toFixed(2));
+            pRecords[i].spotreba = Number.parseFloat((du * di * dt / 1000).toFixed(2));
             //pRecords[i].spotreba = Math.round(du * di * dt / 10) / 100;
             //pRecords[i].spotreba = ((du*di*dt/1000).toFixed(2));
             //console.log((pRecords[i].spotreba));

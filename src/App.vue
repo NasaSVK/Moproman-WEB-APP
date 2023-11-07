@@ -5,8 +5,8 @@ import moment from 'moment'
 </script>
 
 <template>
-  <div class="container-fluid  mt-2">
-    <form class="row">
+  <div class="container-fluid">
+    <form class="row sticky-top bg-body-tertiary border-bottom">
       <fieldset class="col-auto mb-0">
         <legend class="col-form-label pt-0">Interval</legend>
         <div class="form-check">
@@ -30,21 +30,21 @@ import moment from 'moment'
       </fieldset>
 
       <fieldset class="col-auto mb-0 mt-4 pe-0">
-        <label class="col-auto d-block mb-4 mt-2">OD</label>
-        <label class="col-auto">DO</label>
+        <label class="col-auto d-block mb-4 mt-2">Od</label>
+        <label class="col-auto">Do</label>
       </fieldset>
 
       <fieldset class="col mb-0 ps-1 mt-4">
-        <VueDatePicker id="dtpOD" class="picker mb-2" v-model="dpOD"></VueDatePicker>
-        <VueDatePicker id="dtpDO" class="picker mb-2" v-model="dpDO"></VueDatePicker>
+        <VueDatePicker :disabled="this.cp_disable_picker" id="dtpOD" class="picker mb-2" v-model="dpOD"></VueDatePicker>
+        <VueDatePicker :disabled="this.cp_disable_picker" id="dtpDO" class="picker mb-2" v-model="dpDO"></VueDatePicker>
       </fieldset>
 
       <!-- align-self-end -->
 
-      <div class="col-auto ps-2 mt-4">
+      <div class="col-sm-auto ps-2 mt-sm-4">
         <div class="row mb-2">
-          <label for="slZmena" class="col-sm-3 col-form-label">Zmena</label>
-          <div class="col-sm">
+          <label for="slZmena" class="col-2 col-sm-3 col-form-label">Zmena</label>
+          <div class="col">
             <!--div.col mam AUTOMATICKY VHDONY PADDING => vnorene elementy su pekne odsadene od okrajov -->
             <select class="form-select form-control" id="slZmena" aria-label="Default select example" v-model="myZmena">
               <option value="VSETKY">VSETKY</option>
@@ -55,9 +55,9 @@ import moment from 'moment'
           </div>
         </div>
 
-        <div class="row mb-2 justify-content-end">
-          <label for="slPec" class="col-sm-3 col-form-label">Pec</label>
-          <div class="col-sm">
+        <div class="row mb-2">
+          <label for="slPec" class="col-2 col-sm-3 col-form-label">Pec</label>
+          <div class="col">
             <!--div.col mam AUTOMATICKY VHDONY PADDING => vnorene elementy su pekne odsadene od okrajov -->
             <select class="form-select form-control" id="slPec" aria-label="Default select example" v-model="myPec">
               <option value="PEC_A">PEC A</option>
@@ -73,27 +73,33 @@ import moment from 'moment'
         </div>
       </div>
 
-      <!-- <div class="col-10"> -->
+
       <div class="row justify-content-center">
         <button v-on:click="dajDataAPI" type="button" class="btn btn-primary ms-4" style="width:100%;">ZOBRAZ
           DATA</button>
       </div>
-      <!-- </div> -->
+
+      <!-- <a id="popoverButton" class="text-success mt-2" href="#" role="button" data-bs-toggle="popover" title="POZNAMKA"
+        data-bs-content="Realne namerane hodnoty su reprezentovane farebnymi kruhovymi bodmi. Sive linie medzi vykreslenymi bodmi su LEN odhadovene hodnoty veliciny v danom case">POZNAMKA</a> -->
       <a id="popoverButton" class="text-success mt-2" href="#" role="button" data-bs-toggle="popover" title="POZNAMKA"
-        data-bs-content="Sive linie medzi vykreslenymi podmi su len odhadovene hodnoty veliciny v danom case. Realne namerane hodnoty su reprezentovane farebnymi kruhovymi bodmi">POZNAMKA</a>
+        data-bs-content="Realne namerane hodnoty su reprezentovane farebnymi kruhovymi bodmi. Sive linie medzi vykreslenymi bodmi su LEN odhadovene hodnoty veliciny v danom case">POZNAMKA</a>
     </form>
 
     <!-- <div class="container-fluid"> -->
-    <div class="row row-cols-1 row-cols-xxl-2">
-      <div class="col">
-        <MyBarChart :chartData=this.myDataVykon :chartOptions=this.myOptionsTimeComp></MyBarChart>
+    <div class="row row-cols-1 row-cols-xxl-2 ">
+      <!-- <div class="row"> -->
+      <div class="col ">
+        <MyBarChart :chartData=this.myDataVykon :chartOptions=this.myOptionsTimeComp>
+        </MyBarChart>
       </div>
       <div class="col">
         <MyBarChart :chartData=this.myDataSpotreba :chartOptions=this.myOptionsTimeComp>
         </MyBarChart>
       </div>
-      <div class="col">
-        <!-- <p class="spotreba-celkon">CELKOVA SPOTREBA: {{ spotreba_celkom.toFixed(4) }} kWh</p> -->
+      <div class="col position-relative">
+        <p ref="celkovaspotreba" class="spotreba-celkon border rounded-2 lh-1 p-1 fw-semibold text-bg-primary">SPOLU:
+          {{
+            spotreba_celkom.toFixed(2) }} kWh</p>
         <BarChart :chartData="this.myDataSpotrebaBAR"></BarChart>
       </div>
       <div class="col">
@@ -116,29 +122,25 @@ import moment from 'moment'
       </div>
     </div>
   </div>
-  <!-- </div> -->
 </template>
 
 <script>
 
 import MyBarChart from './components/MyBarChart.vue'
 import BarChart from './components/BarChart.vue'
-import LineChart from './components/LineChart.vue'
 import LineChartAPI from './components/LineChartAPI.vue'
 import axios from 'axios'
 import * as Helpers from "./helpers"
 //import * as bootstrap from 'bootstrap'
 //import 'bootstrap/scss/bootstrap.scss'
 
-
-
-
 const KWH = 3600000;
-
 
 export default {
   name: 'App',
-  components: { MyBarChart, BarChart, LineChart, LineChartAPI, VueDatePicker },
+  components: { MyBarChart, BarChart, LineChartAPI, VueDatePicker },
+
+  //========================================== METHODS  =================================================
   methods: {
     dajDataAPI() {
 
@@ -196,15 +198,15 @@ export default {
 
           //NAPATIE
           PomData = reducedData.map(rec => rec.napatie);
-          this.myDataNapatie = { labels: PomLabels, datasets: [{ data: PomData, label: "NAPATIE [V]", backgroundColor: "#f87979", borderColor: "#f87979" }] }
+          this.myDataNapatie = { labels: PomLabels, datasets: [{ data: PomData, label: "NAPATIE [V]", backgroundColor: "#f87979"/*, borderColor: "#f87979"*/ }] }
 
           //PRUD
           PomData = reducedData.map(rec => rec.prud);
           this.myDataPrud = { labels: PomLabels, datasets: [{ data: PomData, label: "PRUD [A]", backgroundColor: "#0066ff" }] }
 
           //TEPLOTA VODY
-          PomData = reducedData.map(rec => rec.tVodaVstup);
-          let PomData1 = reducedData.map(rec => rec.tVodaVystup);
+          PomData = reducedData.map(rec => rec.tVodaVstup.toFixed(2));
+          let PomData1 = reducedData.map(rec => rec.tVodaVystup.toFixed(2));
           this.myDataVoda = { labels: PomLabels, datasets: [{ data: PomData, label: "VODA VSTUP [°C]", backgroundColor: "#9933ff" }, { data: PomData1, label: "VODA VYSTUP [°C]", backgroundColor: "#ff6600" }] }
 
           //TLAK
@@ -237,16 +239,36 @@ export default {
 
     inicializujOdDo() {
       switch (this.picked) {
-        case ('WEEK'): this.tDO = new Date(); this.tOD = Helpers.WeekBack(this.tDO); break;
-        case ('MONTH'): this.tDO = new Date(); this.tOD = Helpers.MonthBack(this.tDO); break;
-        case ('CUSTOM'): this.tDO = this.dpDO; this.tOD = this.dpOD; break;
+        case ('WEEK'): this.tDO = new Date(); this.tOD = Helpers.WeekBack(this.tDO); this.disable_picker = true; break;
+        case ('MONTH'): this.tDO = new Date(); this.tOD = Helpers.MonthBack(this.tDO); this.cp_disable_picker = true; break;
+        case ('CUSTOM'): this.tDO = this.dpDO; this.tOD = this.dpOD; this.cp_disable_picker = false; break;
       }
+    },
+    pocitajSirku() {
+      const WindowWidth = window.innerWidth;
+      const size = WindowWidth / 1320;
+      if ((size < 0.6) || (size > 1)) return;
+      //console.log('Font:' + 16 * WindowWidth / 1920 + "px");
+      this.$refs.celkovaspotreba.style.fontSize = WindowWidth / 1320 + "rem";
     }
-  },
-  computed: {
 
+  },
+  //========================================== MOUNTED =================================================
+  mounted() {
+    window.onresize = this.pocitajSirku;
+  },
+  //========================================== COMPUTED =================================================
+  computed: {
+    cp_disable_picker() {
+      if (this.picked == 'CUSTOM')
+        return false;
+      else
+        return true;
+    },
     myOptionsTimeComp() {
       return {
+        responsive: true,
+        maintainAspectRatio: true,
         scales: {
           x: {
             max: this.TimeBoundary.maxTime,//new Date("1970-01-01T02:00:00"),
@@ -255,8 +277,8 @@ export default {
             time: {
               unit: "hour",
               displayFormats: {
-                hour: "DD.MM. | HH:mm",
-                minute: "DD.MM. | HH:mm"
+                hour: "DD.MM[T]HH[h]",
+                minute: "DD.MM[T]HH:mm"
               }
             }
           }
@@ -264,11 +286,12 @@ export default {
       }
     }
   },
+  //============================================ DATA ===================================================
   data() {
     const self = this;
     return {
       picked: "CUSTOM",
-      spotreba_celkom: -999999,
+      spotreba_celkom: -99999.994,
       //tOD: new Date() - 30 * 60 * 1000, //odcitavaju sa MINUTY
       //tOD: new Date().setMinutes(new Date().getMinutes() - 30),
       tDO: new Date(),
@@ -340,83 +363,20 @@ export default {
   }
 }
 </script>
-
+<!-- ========================================== STYLE ================================================= -->
 <style scoped>
 * {
 
   font-family: Arial, Helvetica, sans-serif;
 }
 
-.picker {
-  /* margin-bottom: 10px; */
-}
-
 .spotreba-celkon {
-  margin-bottom: -1.5rem;
-  margin-top: 1rem;
-
+  position: absolute;
+  top: 40px;
+  left: 50px;
+  color: gray;
+  /* margin-bottom: -3rem; */
+  /* margin-top: 1rem;  */
+  /* font-size: calc(var(--bs-body-font-size)/1) */
 }
-
-/*
-header {
-  line-height: 1.5;
-  max-height: 100vh;
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-nav {
-  width: 100%;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 2rem;
-}
-
-nav a.router-link-exact-active {
-  color: var(--color-text);
-}
-
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
-}
-
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-}
-
-nav a:first-of-type {
-  border: 0;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
-  }
-}*/
 </style>
