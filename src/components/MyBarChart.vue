@@ -1,5 +1,5 @@
 <template>
-  <Line id="my-chart-id1" :data="chartData" :options="chartOptions" />
+  <Line id="my-chart-id1" :data="myChartData" :options="myChartOptions" />
 </template>
 
 <script>
@@ -29,11 +29,11 @@ export default {
       type: Date,
       default: new Date(2023, 12, 31),
     },
-    chartData: {
+    myChartData: {
       type: Object,
       required: true
     },
-    chartOptions: {
+    myChartOptions: {
       type: Object,
       default: {
         responsive: true, plugins: {

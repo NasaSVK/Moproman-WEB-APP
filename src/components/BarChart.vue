@@ -1,5 +1,5 @@
 <template>
-    <Bar id="my-chart-id" :options="chartOptions" :data="chartData" />
+    <Bar id="my-chart-id" :options="myChartOptions" :data="myChartData" />
 </template>
 
 <script>
@@ -24,13 +24,13 @@ export default {
     },
 
     props: {
-        chartData: {
+        myChartData: {
             default: {
                 labels: ['January', 'February', 'March'],
                 datasets: [{ data: [40, 20, 12], backgroundColor: "#00bfff", label: "SPOTREBABAR" }]
             }
         },
-        chartOptions: {
+        myChartOptions: {
             type: Object,
             default: {
                 responsive: true, plugins: {

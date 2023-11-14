@@ -3,7 +3,7 @@ import VueDatePicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
 import moment from 'moment'
 </script>
-
+aaaaaaaaaaaaaaaaaaaaa
 <template>
   <div class="container-fluid">
     <form class="row sticky-top bg-body-tertiary border-bottom">
@@ -88,38 +88,74 @@ import moment from 'moment'
     <!-- <div class="container-fluid"> -->
     <div class="row row-cols-1 row-cols-xxl-2 ">
       <!-- <div class="row"> -->
-      <div class="col ">
-        <MyBarChart :chartData=this.myDataVykon :chartOptions=this.myOptionsTimeComp>
+      <div class="col" v-show="this.zobraz.mojVykon">
+        <MyBarChart :myChartData=this.myDataMojVykon :myChartOptions=this.myOptionsTimeComp>
         </MyBarChart>
       </div>
-      <div class="col">
-        <MyBarChart :chartData=this.myDataSpotreba :chartOptions=this.myOptionsTimeComp>
+      <div class="col" v-show="this.zobraz.DBVykon">
+        <MyBarChart :myChartData=this.myDataDBVykon :myChartOptions=this.myOptionsTimeComp>
         </MyBarChart>
       </div>
-      <div class="col position-relative">
-        <p ref="celkovaspotreba" class="spotreba-celkon border rounded-2 lh-1 p-1 fw-semibold text-bg-primary">SPOLU:
-          {{
-            spotreba_celkom.toFixed(2) }} kWh</p>
-        <BarChart :chartData="this.myDataSpotrebaBAR"></BarChart>
+      <div class="col" v-show="this.zobraz.okamzitaSpotreba">
+        <MyBarChart :myChartData=this.myDataSpotreba :myChartOptions=this.myOptionsTimeComp></MyBarChart>
       </div>
-      <div class="col">
-        <MyBarChart @click="redukujPocet" :chartData=this.myDataNapatie :chartOptions=this.myOptionsTimeComp></MyBarChart>
+      <div class="col position-relative" v-show="this.zobraz.spotrebaZmien">
+        <p ref="celkovaspotreba" class="spotreba-celkon border rounded-2 lh-1 p-1 fw-semibold text-bg-primary"
+          v-show="this.zobraz.spotrebaZmien">SPOLU:
+          {{ spotreba_celkom.toFixed(2) }} kWh</p>
+        <BarChart :myChartData="this.myDataSpotrebaBAR"></BarChart>
       </div>
-      <div class="col">
-        <MyBarChart :chartData=this.myDataPrud :chartOptions=this.myOptionsTimeComp></MyBarChart>
+      <div class="col" v-show="this.zobraz.napatie">
+        <MyBarChart :myChartData=this.myDataNapatie :myChartOptions=this.myOptionsTimeComp></MyBarChart>
       </div>
-      <div class="col">
-        <MyBarChart :chartData=this.myDataVoda :chartOptions=this.myOptionsTimeComp></MyBarChart>
+      <div class="col" v-show="this.zobraz.prud">
+        <MyBarChart :myChartData=this.myDataPrud :myChartOptions=this.myOptionsTimeComp>
+        </MyBarChart>
       </div>
-      <div class="col">
-        <MyBarChart :chartData=this.myDataTlak :chartOptions=this.myOptionsTimeComp></MyBarChart>
+      <div class="col" v-show="this.zobraz.teplotaVstup">
+        <MyBarChart :myChartData=this.myDataVoda :myChartOptions=this.myOptionsTimeComp>
+        </MyBarChart>
       </div>
-      <div class="col">
-        <MyBarChart :chartData=this.myDataSobertVstup :chartOptions=this.myOptionsTimeComp></MyBarChart>
+      <div class="col" v-show="this.zobraz.tlak">
+        <MyBarChart :myChartData=this.myDataTlak :myChartOptions=this.myOptionsTimeComp>
+        </MyBarChart>
       </div>
-      <div class="col">
-        <MyBarChart :chartData=this.myDataSobertVykon :chartOptions=this.myOptionsTimeComp></MyBarChart>
+      <div class="col" v-show="this.zobraz.sobertVstup">
+        <MyBarChart :myChartData=this.myDataSobertVstup :myChartOptions=this.myOptionsTimeComp></MyBarChart>
       </div>
+      <div class="col" v-show="this.zobraz.sobertVykon">
+        <MyBarChart :myChartData=this.myDataSobertVykon :myChartOptions=this.myOptionsTimeComp>
+        </MyBarChart>
+      </div>
+      <div class="col" v-show="this.zobraz.rzPrisposobenie">
+        <MyBarChart :myChartData=this.myDataRzPrisposobenie :myChartOptions=this.myOptionsTimeComp>
+        </MyBarChart>
+      </div>
+      <div class="col" v-show="this.zobraz.prietok">
+        <MyBarChart :myChartData=this.myDataPrietok :myChartOptions=this.myOptionsTimeComp>
+        </MyBarChart>
+      </div>
+      <div class="col" v-show="this.zobraz.frekvencia">
+        <MyBarChart :myChartData=this.myDataFrekvencia :myChartOptions=this.myOptionsTimeComp>
+        </MyBarChart>
+      </div>
+
+      <div class="col" v-show="this.zobraz.teplotaP1">
+        <MyBarChart :myChartData=this.myDataTeplotaP1P2Okruh :myChartOptions=this.myOptionsTimeComp>
+        </MyBarChart>
+      </div>
+      <!-- <div class="col" v-show="this.zobraz.teplotaP1">
+        <MyBarChart :myChartData=this.myDataTeplotaP1 :myChartOptions=this.myOptionsTimeComp>
+        </MyBarChart>
+      </div>
+      <div class="col" v-show="this.zobraz.teplotaP2">
+        <MyBarChart :myChartData=this.myDataTeplotaP2 :myChartOptions=this.myOptionsTimeComp>
+        </MyBarChart>
+      </div>
+      <div class="col" v-show="this.zobraz.teplotaOkruh">
+        <MyBarChart :myChartData=this.myDataTeplotaOkruh :myChartOptions=this.myOptionsTimeComp>
+        </MyBarChart>
+      </div> -->
     </div>
   </div>
 </template>
@@ -143,8 +179,9 @@ export default {
   //========================================== METHODS  =================================================
   methods: {
     dajDataAPI() {
-
+      console.error("ODOSLANY GET REQUEST NA SERVER");
       this.inicializujOdDo();
+      this.zobraz = Helpers.ZobrazPec(this.myPec);
 
       var URL = "https://192.168.1.71:7117/record/interval";
       // var URL = "https://localhost:7117/record/interval?dateStart="+pOD+"&dateEnd="+pDO;
@@ -166,9 +203,12 @@ export default {
 
           // SPOTREBA ZMIEN
           // --------------------------------------------------------------------------------------------------------------------------------------
+
+          console.log("DOSLI DATA ZO SERVERA \n [object Object] je jeden zaznam z DB \n");
+          console.log(response.data);
           this.spotreba_celkom = 0;
           Helpers.DodajSpotrebu(response.data);
-          console.log("DATA SO SPOTREBOU: {0}", response.data);
+          //console.log("DATA SO SPOTREBOU: {0}", response.data);
 
           let PomLabels = ["ZMENA-1", "ZMENA-2", "ZMENA-3"]
           let PomData = PomLabels.map(zmenaa => {
@@ -180,19 +220,23 @@ export default {
 
 
           //console.log("total:{0}", PomData);
-          this.myDataSpotrebaBAR = { labels: PomLabels, datasets: [{ data: PomData, label: "SPOTREBA ZMIEN [kWh]", backgroundColor: "#993333" }] }
+          this.myDataSpotrebaBAR = { labels: PomLabels, datasets: [{ data: PomData, label: "SPOTREBA ZMIEN [kWh]", backgroundColor: "#ff944d" }] }
           // --------------------------------------------------------------------------------------------------------------------------------------
-
+          // #ffbf00
           //CASOVA OS
           let reducedData = Helpers.RedukujPocetHodnot(response.data, 200);
           PomLabels = reducedData.map(rec => this.parsujDatum(rec.dateTime));
           this.TimeBoundary = Helpers.DodajKrajneHodnoty(new Date(PomLabels[0]), new Date(PomLabels[PomLabels.length - 1]));
 
-          //VYKON
+          //POCITANY VYKON
           PomData = reducedData.map(rec => rec.mojvykon);
-          this.myDataVykon = { labels: PomLabels, datasets: [{ data: PomData, label: "VYKON [W]", backgroundColor: "#33cc33" }] }
+          this.myDataMojVykon = { labels: PomLabels, datasets: [{ data: PomData, label: "POCITANY VYKON [W]", backgroundColor: "#33cc33" }] }
 
-          //SPOTREBA
+          //DB VYKON
+          PomData = reducedData.map(rec => rec.vykon);
+          this.myDataDBVykon = { labels: PomLabels, datasets: [{ data: PomData, label: "VYKON [W]", backgroundColor: "#339933" }] }
+
+          //OKAMZITA SPOTREBA
           PomData = reducedData.map(rec => rec.spotreba);
           this.myDataSpotreba = { labels: PomLabels, datasets: [{ data: PomData, label: "OKAMZITA SPOTREBA [Ws]", backgroundColor: "#ffbf00" }] }
 
@@ -205,8 +249,7 @@ export default {
           this.myDataPrud = { labels: PomLabels, datasets: [{ data: PomData, label: "PRUD [A]", backgroundColor: "#0066ff" }] }
 
           //TEPLOTA VODY
-          PomData = reducedData.map(rec => rec.tVodaVstup.toFixed(2));
-          let PomData1 = reducedData.map(rec => rec.tVodaVystup.toFixed(2));
+          PomData = reducedData.map(rec => rec.tVodaVstup.toFixed(2)); let PomData1 = reducedData.map(rec => rec.tVodaVystup.toFixed(2));
           this.myDataVoda = { labels: PomLabels, datasets: [{ data: PomData, label: "VODA VSTUP [°C]", backgroundColor: "#9933ff" }, { data: PomData1, label: "VODA VYSTUP [°C]", backgroundColor: "#ff6600" }] }
 
           //TLAK
@@ -221,6 +264,34 @@ export default {
           PomData = reducedData.map(rec => rec.sobertVykon);
           this.myDataSobertVykon = { labels: PomLabels, datasets: [{ data: PomData, label: "SOBERT VYKON  [W]", backgroundColor: "#ffcc99" }] }
 
+          //RZPRISPOSOBENIE
+          PomData = reducedData.map(rec => rec.rzPribenie);
+          this.myDataRzPrisposobenie = { labels: PomLabels, datasets: [{ data: PomData, label: "RZ Prisposobenie [?/?]", backgroundColor: "#804000" }] }
+
+          //FREKVENCIA
+          PomData = reducedData.map(rec => rec.frekvencia);
+          this.myDataFrekvencia = { labels: PomLabels, datasets: [{ data: PomData, label: "FREKVENCIA [Hz]", backgroundColor: "#cc3300" }] }
+
+          //PRIETOK
+          PomData = reducedData.map(rec => rec.prietok);
+          this.myDataPrietok = { labels: PomLabels, datasets: [{ data: PomData, label: "PRIETOK [l/s]", backgroundColor: "#3399ff" }] }
+
+          //-------------------------------------------------------------------------------------------------------------------------------------------------------
+          //TEPLOTA P1
+          PomData = reducedData.map(rec => rec.teplotaP1);
+          this.myDataTeplotaP1 = { labels: PomLabels, datasets: [{ data: PomData, label: "TEPLOTA P1 [°C]", backgroundColor: "#ff6666" }] }
+
+          //TEPLOTA P2
+          PomData1 = reducedData.map(rec => rec.teplotaP2);
+          this.myDataTeplotaP2 = { labels: PomLabels, datasets: [{ data: PomData1, label: "TEPLOTA P2 [°C]", backgroundColor: "#d65cad" }] }
+
+          //TEPLOTA OKRUH
+          let PomData2 = reducedData.map(rec => rec.teplotaOkruh);
+          this.myDataTeplotaOkruh = { labels: PomLabels, datasets: [{ data: PomData2, label: "TEPLOTA OKRUH [°C]", backgroundColor: "#d24dff" }] }
+
+          //TEPLOTA P1+P2+OKRUH
+          this.myDataTeplotaP1P2Okruh = { labels: PomLabels, datasets: [{ data: PomData, label: "TEPLOTA P1 [°C]", backgroundColor: "#ff6666" }, { data: PomData1, label: "TEPLOTA P2 [°C]", backgroundColor: "#d65cad" }, { data: PomData2, label: "TEPLOTA OKRUH [°C]", backgroundColor: "#d24dff" }] }
+          //-------------------------------------------------------------------------------------------------------------------------------------------------------
         })
         .catch((error) => {
           console.error(error);
@@ -290,6 +361,8 @@ export default {
   data() {
     const self = this;
     return {
+      zobraz: { frekvencia: true, mojVykon: true, DBVykon: true, okamzitaSpotreba: true, spotrebaZmien: true, napatie: true, prud: true, tlak: true, sobertVstup: true, sobertVykon: true, rzPrisposobenie: true, prietok: true, teplotaVstup: true, teplotaP1: true, teplotaP2: true, teplotaOkruh: true },
+      //zobraz: true,
       picked: "CUSTOM",
       spotreba_celkom: -99999.994,
       //tOD: new Date() - 30 * 60 * 1000, //odcitavaju sa MINUTY
@@ -318,18 +391,21 @@ export default {
           }
         }
       },
-      myDataVykon: {
+      myDataMojVykon: {
         labels: [0],
-        datasets: [{ data: [0], label: "VYKON [W]", backgroundColor: "#33cc33" }]
+        datasets: [{ data: [0], label: "POCITANY VYKON [W]", backgroundColor: "#33cc33" }]
+      },
+      myDataDBVykon: {
+        labels: [0],
+        datasets: [{ data: [0], label: "VYKON [W]", backgroundColor: "#339933" }]
       },
       myDataSpotreba: {
         labels: [0],
         datasets: [{ data: [0], label: "OKAMZITA SPOTREBA [Ws]", backgroundColor: "#ffbf00" }]
       },
-
       myDataSpotrebaBAR: {
         labels: [0],
-        datasets: [{ data: [0], label: "SPOTREBA ZMIEN [kWh]", backgroundColor: "#993333" }]
+        datasets: [{ data: [0], label: "SPOTREBA ZMIEN [kWh]", backgroundColor: "#ff944d" }]
       },
       myDataNapatie: {
         //labels: [ 'January', 'February', 'March' ],
@@ -356,6 +432,22 @@ export default {
       myDataVoda: {
         labels: [0],
         datasets: [{ data: [0], label: "VODA VSTUP [°C]", backgroundColor: "#9933ff" }, { data: [0], label: "VODA VYSTUP [°C]", backgroundColor: "#ff6600" }]
+      },
+      myDataFrekvencia: {
+        labels: [0],
+        datasets: [{ data: [0], label: "FREKVENCIA [Hz]", backgroundColor: "#cc3300" }]
+      },
+      myDataRzPrisposobenie: {
+        labels: [0],
+        datasets: [{ data: [0], label: "RZPrisposobenie [Hz]", backgroundColor: "#804000" }]
+      },
+      myDataPrietok: {
+        labels: [0],
+        datasets: [{ data: [0], label: "PRIETOK [l/s]", backgroundColor: "#3399ff" }]
+      },
+      myDataTeplotaP1P2Okruh: {
+        labels: [0],
+        datasets: [{ data: [0], label: "TEPLOTA P1 [°C]", backgroundColor: "#ff6666" }, { data: [0], label: "TEPLOTA P2 [°C]", backgroundColor: "#d65cad" }, { data: [0], label: "TEPLOTA OKRUH [°C]", backgroundColor: "#d24dff" }]
       },
       myZmena: "VSETKY",
       myPec: "PEC_C"

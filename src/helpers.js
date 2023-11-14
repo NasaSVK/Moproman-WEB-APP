@@ -1,5 +1,22 @@
 const DELTA = 5000; //[ms] predpokladany casovy interval medzi dvomi meraniami
 
+
+export function ZobrazPec(pPec) {
+
+    let result = {};
+    switch (pPec) {
+        case ("PEC_A"): result = { frekvencia: true, mojVykon: false, DBVykon: false, okamzitaSpotreba: false, spotrebaZmien: false, napatie: false, prud: false, tlak: false, sobertVstup: false, sobertVykon: false, rzPrisposobenie: false, prietok: false, teplotaVstup: true, teplotaP1: false, teplotaP2: false, teplotaOkruh: false }; break;
+        case ("PEC_B"): result = { frekvencia: false, mojVykon: true, DBVykon: true, okamzitaSpotreba: true, spotrebaZmien: true, napatie: true, prud: true, tlak: true, sobertVstup: true, sobertVykon: true, rzPrisposobenie: true, prietok: false, teplotaVstup: true, teplotaP1: false, teplotaP2: false, teplotaOkruh: false }; break;
+        case ("PEC_C"): result = { frekvencia: false, mojVykon: true, DBVykon: true, okamzitaSpotreba: true, spotrebaZmien: true, napatie: true, prud: true, tlak: true, sobertVstup: true, sobertVykon: true, rzPrisposobenie: true, prietok: false, teplotaVstup: true, teplotaP1: true, teplotaP2: true, teplotaOkruh: false }; break;
+        case ("PEC_D"): result = { frekvencia: false, mojVykon: true, DBVykon: true, okamzitaSpotreba: true, spotrebaZmien: true, napatie: true, prud: true, tlak: true, sobertVstup: true, sobertVykon: true, rzPrisposobenie: true, prietok: false, teplotaVstup: true, teplotaP1: true, teplotaP2: true, teplotaOkruh: false }; break;
+        case ("PEC_G"): result = { frekvencia: false, mojVykon: true, DBVykon: true, okamzitaSpotreba: true, spotrebaZmien: true, napatie: true, prud: true, tlak: false, sobertVstup: true, sobertVykon: true, rzPrisposobenie: true, prietok: true, teplotaVstup: true, teplotaP1: true, teplotaP2: true, teplotaOkruh: false }; break;
+        case ("PEC_H"): result = { frekvencia: true, mojVykon: true, DBVykon: true, okamzitaSpotreba: true, spotrebaZmien: true, napatie: true, prud: true, tlak: false, sobertVstup: false, sobertVykon: false, rzPrisposobenie: true, prietok: true, teplotaVstup: true, teplotaP1: true, teplotaP2: true, teplotaOkruh: true }; break;
+    }
+
+    return result
+}
+
+
 export function WeekBack(pDatum) {
 
     let date = new Date();
@@ -20,7 +37,7 @@ export function MonthBack(pDatum) {
 
 
 export var RedukujPocetHodnot = (pPole, pMinPocet = 100) => {
-    console.log("POVODNE POLE: " + pPole);
+    //console.log("POVODNE POLE: " + pPole);
     var dlzka = pPole.length; if (dlzka == 0) return [];
     var MAX_INDEX = dlzka - 1;
     var PER = Math.floor(dlzka / pMinPocet);
