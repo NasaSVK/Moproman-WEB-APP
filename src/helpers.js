@@ -47,9 +47,7 @@ export var RedukujPocetHodnot = (pPole, pMinPocet = 100) => {
         if (index % PER == 0)
             result.push(hodnota);
     });
-
     //console.log("REDUKOVANE POLE: "+ result);
-
     if (MAX_INDEX % PER != 0)
         result.push(pPole[MAX_INDEX]); //vlozi do redukovaneho pola posledny prvok pola povodneho
     //console.log("FINALNE POLE: "+ result);

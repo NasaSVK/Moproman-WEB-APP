@@ -33,7 +33,9 @@ export default {
         myChartOptions: {
             type: Object,
             default: {
-                responsive: true, plugins: {
+                responsive: true, 
+                maintainAspectRatio: false,
+                plugins: {
                     // title: {
                     //     display: true,
                     //     text: 'Custom Chart Title'
