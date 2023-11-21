@@ -210,19 +210,17 @@ export default {
           Helpers.DodajSpotrebu(response.data);
           //console.log("DATA SO SPOTREBOU: {0}", response.data);
 
+          //SPOTREBA ZMIEN
           let PomLabels = ["ZMENA-1", "ZMENA-2", "ZMENA-3"]
           let PomData = PomLabels.map(zmenaa => {
             var total = 0;
             response.data.forEach(rec => (rec.zmena == zmenaa) && (total += rec.spotreba));
             this.spotreba_celkom += total / KWH;
             return total / KWH;
-          })
-
-
-          //console.log("total:{0}", PomData);
-          this.myDataSpotrebaBAR = { labels: PomLabels, datasets: [{ data: PomData, label: "SPOTREBA ZMIEN [kWh]", backgroundColor: "#ff944d" }] }
+          });
+          this.myDataSpotrebaBAR = { labels: PomLabels, datasets: [{ data: PomData, label: "SPOTREBA ZMIEN [kWh]", backgroundColor: "#ff944d", borderColor: "#b34700", borderWidth: 2 }] }
           // --------------------------------------------------------------------------------------------------------------------------------------
-          // #ffbf00
+
           //CASOVA OS
           let reducedData = Helpers.RedukujPocetHodnot(response.data, 200);
           PomLabels = reducedData.map(rec => this.parsujDatum(rec.dateTime));
@@ -290,7 +288,7 @@ export default {
           this.myDataTeplotaOkruh = { labels: PomLabels, datasets: [{ data: PomData2, label: "TEPLOTA OKRUH [°C]", backgroundColor: "#d24dff" }] }
 
           //TEPLOTA P1+P2+OKRUH
-          this.myDataTeplotaP1P2Okruh = { labels: PomLabels, datasets: [{ data: PomData, label: "TEPLOTA P1 [°C]", backgroundColor: "#ff6666" }, { data: PomData1, label: "TEPLOTA P2 [°C]", backgroundColor: "#d65cad" }, { data: PomData2, label: "TEPLOTA OKRUH [°C]", backgroundColor: "#d24dff" }] }
+          this.myDataTeplotaP1P2Okruh = { labels: PomLabels, datasets: [{ data: PomData, label: "TEPLOTA P1 [°C]", backgroundColor: "#ff6666" }, { data: PomData1, label: "TEPLOTA P2 [°C]", backgroundColor: "#d65cad" }, { data: PomData2, label: "TEPLOTA OKRUH [°C]", backgroundColor: "#9933ff" }] }
           //-------------------------------------------------------------------------------------------------------------------------------------------------------
         })
         .catch((error) => {
@@ -340,6 +338,7 @@ export default {
       return {
         responsive: true,
         maintainAspectRatio: true,
+
         scales: {
           x: {
             max: this.TimeBoundary.maxTime,//new Date("1970-01-01T02:00:00"),
@@ -405,7 +404,7 @@ export default {
       },
       myDataSpotrebaBAR: {
         labels: [0],
-        datasets: [{ data: [0], label: "SPOTREBA ZMIEN [kWh]", backgroundColor: "#ff944d" }]
+        datasets: [{ data: [0], label: "SPOTREBA ZMIEN [kWh]", backgroundColor: "#ff944d", borderColor: "#b34700", borderWidth: 2 }]
       },
       myDataNapatie: {
         //labels: [ 'January', 'February', 'March' ],
@@ -447,7 +446,7 @@ export default {
       },
       myDataTeplotaP1P2Okruh: {
         labels: [0],
-        datasets: [{ data: [0], label: "TEPLOTA P1 [°C]", backgroundColor: "#ff6666" }, { data: [0], label: "TEPLOTA P2 [°C]", backgroundColor: "#d65cad" }, { data: [0], label: "TEPLOTA OKRUH [°C]", backgroundColor: "#d24dff" }]
+        datasets: [{ data: [0], label: "TEPLOTA P1 [°C]", backgroundColor: "#ff6666" }, { data: [0], label: "TEPLOTA P2 [°C]", backgroundColor: "#d65cad" }, { data: [0], label: "TEPLOTA OKRUH [°C]", backgroundColor: "#9933ff" }]
       },
       myZmena: "VSETKY",
       myPec: "PEC_C"

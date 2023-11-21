@@ -1,5 +1,5 @@
 <template>
-    <Bar id="my-chart-id" :options="myChartOptions" :data="myChartData" />
+    <Bar id="my-chart-id" :options="myChartOptions" :data="myChartData" :plugins="this.plugin" />
 </template>
 
 <script>
@@ -19,7 +19,19 @@ export default {
             },
             chartOptions: {
                 responsive: true
-            }
+            },
+
+            plugin: [{
+                id: 'customCanvasBackgroundColor',
+                beforeDraw: (chart, args, options) => {
+                    const { ctx } = chart;
+                    ctx.save();
+                    ctx.globalCompositeOperation = 'destination-over';
+                    ctx.fillStyle = options.color || '#99ffff';
+                    ctx.fillRect(0, 0, chart.width, chart.height);
+                    ctx.restore();
+                }
+            }]
         }
     },
 
@@ -33,12 +45,28 @@ export default {
         myChartOptions: {
             type: Object,
             default: {
-                responsive: true, plugins: {
-                    // title: {
-                    //     display: true,
-                    //     text: 'Custom Chart Title'
-                    // }
+                responsive: true,
+                plugins: {
+                    customCanvasBackgroundColor: {
+                        color: 'lightGreen',
+                    }
                 }
+                /*
+                plugins: [{
+
+                    id: 'ChartPlugin1',
+                    beforeDraw(chart, args, plugins) {
+                        const { ctx, chartArea: { top, bottom, left, right, width, height } } = chart;
+                        ctx.save();
+                        ctx.fillStyle = 'rgba(0,0,0,0.5)';
+                        ctx.fillRect(left, top, width, height);
+                    }*/
+
+                // title: {
+                //     display: true,
+                //     text: 'Custom Chart Title'
+                // }
+                //}]
             }
         }
     }
