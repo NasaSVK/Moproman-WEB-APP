@@ -46,6 +46,7 @@ export default {
             type: Object,
             default: {
                 responsive: true,
+                maintainAspectRatio: false,
                 plugins: {
                     customCanvasBackgroundColor: {
                         color: 'lightGreen',
