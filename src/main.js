@@ -1,5 +1,3 @@
-//zobrazovanie hlasok v konzole
-Vue.config.productionTip = true;
 
 //import './assets/main.css'
 
@@ -24,3 +22,8 @@ document.querySelectorAll('[data-bs-toggle="popover"]')
     .forEach(popover => {
         new Popover(popover)
     })
+
+//import { Vue } from 'vue';
+//window.Vue = Vue;
+//zobrazovanie hlasok v konzole
+//Vue.config.productionTip = true;

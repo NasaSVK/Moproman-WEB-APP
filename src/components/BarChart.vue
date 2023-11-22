@@ -24,11 +24,11 @@ export default {
             plugin: [{
                 id: 'customCanvasBackgroundColor',
                 beforeDraw: (chart, args, options) => {
-                    const { ctx } = chart;
+                    const { ctx, chartArea: { left, top, width, height } } = chart;
                     ctx.save();
                     ctx.globalCompositeOperation = 'destination-over';
                     ctx.fillStyle = options.color || '#99ffff';
-                    ctx.fillRect(0, 0, chart.width, chart.height);
+                    ctx.fillRect(left, top, width, height);
                     ctx.restore();
                 }
             }]
@@ -49,20 +49,9 @@ export default {
                 maintainAspectRatio: false,
                 plugins: {
                     customCanvasBackgroundColor: {
-                        color: 'lightGreen',
+                        color: 'white',
                     }
                 }
-                /*
-                plugins: [{
-
-                    id: 'ChartPlugin1',
-                    beforeDraw(chart, args, plugins) {
-                        const { ctx, chartArea: { top, bottom, left, right, width, height } } = chart;
-                        ctx.save();
-                        ctx.fillStyle = 'rgba(0,0,0,0.5)';
-                        ctx.fillRect(left, top, width, height);
-                    }*/
-
                 // title: {
                 //     display: true,
                 //     text: 'Custom Chart Title'

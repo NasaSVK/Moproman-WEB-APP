@@ -10,11 +10,12 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url)),      
+      '@': fileURLToPath(new URL('./src', import.meta.url)),
     }
   },
   build: {
-    chunkSizeWarningLimit:1600,
+    chunkSizeWarningLimit: 1600,
     outDir: '../../../../../inetpub/wwwroot/wdMopromanWebAPP'
-  }
+  },
+  publicDir: './mypublic'
 })

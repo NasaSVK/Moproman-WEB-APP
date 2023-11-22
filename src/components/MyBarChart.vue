@@ -1,5 +1,5 @@
 <template>
-  <Line id="my-chart-id1" :data="myChartData" :options="myChartOptions" />
+  <Line id="my-chart-id1" :data="myChartData" :options="myChartOptions" :plugins="this.plugin" />
 </template>
 
 <script>
@@ -14,6 +14,23 @@ export default {
   components: { Line },
   methods: {
   },
+  data() {
+    return {
+      plugin: [{
+        id: 'customCanvasBackgroundColor',
+        beforeDraw: (chart, args, options) => {
+          const { ctx, chartArea: { left, top, width, height } } = chart;
+          ctx.save();
+          ctx.globalCompositeOperation = 'destination-over';
+          ctx.fillStyle = options.color || '#99ffff';
+          //ctx.fillRect(0, 0, chart.width, chart.height);
+          ctx.fillRect(left, top, width, height);
+          ctx.restore();
+        }
+      }]
+    }
+  },
+
   props: {
 
     label: {
@@ -36,11 +53,12 @@ export default {
     myChartOptions: {
       type: Object,
       default: {
-        responsive: true, plugins: {
-          // title: {
-          //     display: true,
-          //     text: 'Custom Chart Title'
-          // }
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          customCanvasBackgroundColor: {
+            color: 'white',
+          }
         },
         scales: {
           x: {
@@ -50,7 +68,6 @@ export default {
               unit: "day"
             }
           }
-
         }
       }
     }
