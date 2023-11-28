@@ -1,4 +1,5 @@
 
+
 //import './assets/main.css'
 
 import "bootstrap/dist/css/bootstrap.css"
@@ -11,6 +12,11 @@ import { Popover } from 'bootstrap';
 
 import { createApp } from 'vue'
 import App from './App.vue'
+
+import Emitter from 'tiny-emitter';
+
+var emitter = new Emitter();
+export default emitter;
 
 const app = createApp(App)
 

@@ -17,5 +17,5 @@ export default defineConfig({
     chunkSizeWarningLimit: 1600,
     outDir: '../../../../../inetpub/wwwroot/wdMopromanWebAPP'
   },
-  publicDir: './mypublic'
+  publicDir: './public'
 })
