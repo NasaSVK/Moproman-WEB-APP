@@ -17,7 +17,7 @@ import EMT from './main.js';
    </Modal>
    <div class="container-fluid">
       <form class="row sticky-top bg-gray-200 bg-gradient border-bottom border-2">
-         <fieldset class="col-auto mb-0">
+         <fieldset class="col-auto mb-0 pe-2">
             <legend class="col-form-label pt-0">Interval</legend>
             <div class="form-check">
                <input class="form-check-input" type="radio" id="rdbTzden" value="WEEK" v-model="picked">
@@ -39,7 +39,7 @@ import EMT from './main.js';
             </div>
          </fieldset>
 
-         <fieldset class="col-auto mb-0 mt-4 pe-0">
+         <fieldset class="col-auto mb-0 mt-4 pe-0 ps-0">
             <label class="col-auto d-block mb-4 mt-2">Od</label>
             <label class="col-auto">Do</label>
          </fieldset>
@@ -53,7 +53,7 @@ import EMT from './main.js';
 
          <div class="col-sm-auto ps-2 mt-sm-4">
             <div class="row mb-2">
-               <label for="slZmena" class="col-2 col-sm-3 col-form-label">Zmena</label>
+               <label for="slZmena" class="col-2 col-sm-3 pe-0 col-form-label">Zmena</label>
                <div class="col">
                   <!--div.col mam AUTOMATICKY VHDONY PADDING => vnorene elementy su pekne odsadene od okrajov -->
                   <select class="form-select form-control" id="slZmena" aria-label="Default select example" v-model="myZmena">
@@ -66,7 +66,7 @@ import EMT from './main.js';
             </div>
 
             <div class="row mb-2">
-               <label for="slPec" class="col-2 col-sm-3 col-form-label">Pec</label>
+               <label for="slPec" class="col-2 col-sm-3 pe-0 col-form-label">Pec</label>
                <div class="col">
                   <!--div.col mam AUTOMATICKY VHDONY PADDING => vnorene elementy su pekne odsadene od okrajov -->
                   <select class="form-select form-control" id="slPec" aria-label="Default select example" v-model="myPec">
@@ -97,7 +97,7 @@ import EMT from './main.js';
       <!-- <div class="container-fluid"> -->
       <div class="row row-cols-1 row-cols-xxl-2">
          <!-- <div class="row"> -->
-         <div class="col" v-show="zobraz.mojVykon">
+         <div class="col ps-0 pe-0" v-show="zobraz.mojVykon">
             <MyBarChart :myChartData=myDataMojVykon :myChartOptions=myOptionsTimeComp v-on:click="showModal('POCITANY VYKON', myDataMojVykon, myOptionsTimeComp)"></MyBarChart>
          </div>
          <div class="col" v-show="zobraz.DBVykon">

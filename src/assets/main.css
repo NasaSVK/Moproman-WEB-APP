@@ -1,42 +1,80 @@
 html {
-    position: relative;
-    min-height: 100%;
-  }
+  position: relative;
+  min-height: 100%;
+}
 
 html body {
-    /* Margin bottom by footer height */
-    margin-bottom: 5rem;
-} 
+  /* Margin bottom by footer height */
+  margin-bottom: 5rem;
+}
 
 .footer {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    white-space: nowrap;
-    line-height: 4rem; /* Vertically center the text there */
-    text-align: center; 
-    word-wrap: break-word;
-  }
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  line-height: 4rem;
+  /* Vertically center the text there */
+  text-align: center;
+  /* word-wrap: break-word; */
+}
 
-  .bg-gray-200{
-    background-color: #e9ecef ;
-  }
-  .bg-gray-100{
-    background-color: #f8f9fa ;
-  }
+.nazov,
+.autor {
+  white-space: nowrap;
+}
 
+.nazov:after {
+  content: ' / ';
+
+}
+
+.bg-gray-200 {
+  background-color: #e9ecef;
+}
+
+.bg-gray-100 {
+  background-color: #f8f9fa;
+}
+
+footer img {
+  width: 1.5rem;
+  height: 100%;
+
+}
+
+footer p {
+  margin: 0 0.4rem
+}
+
+/* real max-width: 557.6px  prva hodnota za hranicou 558.4px */
+@media (max-width: 620px) {
   footer img {
-    width:1.3rem;
+    width: 1.6rem;
+    height: auto;
   }
 
-  @media (max-width: 600px) {
-    footer img {
-        width:1rem;
-      }
-
-    .footer{
-
-        font-size: 0.75rem;
-    }  
+  .footer {
+    padding: 1rem 0;
+    line-height: 1.1rem;
+    font-size: 0.75rem;
   }
-  
+
+
+  footer .container-fluid {
+    max-width: 260px;
+
+  }
+
+  /* footer img, */
+  .nazov:after {
+
+    display: none;
+
+  }
+}
+
+@media (max-width: 310px) {
+  footer img {
+    display: none;
+  }
+}
