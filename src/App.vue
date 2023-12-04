@@ -15,9 +15,9 @@ import EMT from './main.js';
       <button class="btn btn-info"> Bootstrap modal </button>
     </template> -->
    </Modal>
-   <div class="container-fluid">
+   <div class="container-fluid ps-0 pe-0 ps-sm-2 pe-sm-2">
       <form class="row sticky-top bg-gray-200 bg-gradient border-bottom border-2">
-         <fieldset class="col-auto mb-0 pe-2">
+         <fieldset class="col-auto mb-0 pe-2 ">
             <legend class="col-form-label pt-0">Interval</legend>
             <div class="form-check">
                <input class="form-check-input" type="radio" id="rdbTzden" value="WEEK" v-model="picked">
@@ -289,19 +289,23 @@ export default {
       showModal(pTitle, pData, pOptions) {
          console.log("Emitnuty globalny showModal");
          console.log(pTitle);
-         EMT.emit('showModal', pTitle, pData, pOptions);
+         EMT.emit("showModal", pTitle, pData, pOptions);
          this.myModalData = pData;
          console.log(pTitle);
-
       },
       dajDataAPI() {
          console.warn("ODOSLANY GET REQUEST NA SERVER");
+         console.log(import.meta.env.DEV);
+         console.log(import.meta.env.PROD);
+
          this.loading = true;
          this.inicializujOdDo();
          this.zobraz = Helpers.ZobrazPec(this.myPec);
 
-         //var URL = "https://localhost:7117/record/interval";
-         var URL = "http://192.168.45.1:2030/record/interval";
+         //https://stackoverflow.com/questions/49257650/how-check-if-vue-is-in-development-mode
+         if (import.meta.env.DEV)
+            var URL = "https://localhost:7117/record/interval";
+         else var URL = "http://192.168.45.1:2030/record/interval";
          // var URL = "https://localhost:7117/record/interval?dateStart="+pOD+"&dateEnd="+pDO;
          axios
             //.get("https://localhost:7117/record/interval?dateStart=2023-10-16T12:00:00&dateEnd=2023-10-16T19:15:00")
