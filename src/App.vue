@@ -15,10 +15,11 @@ import EMT from './main.js';
       <button class="btn btn-info"> Bootstrap modal </button>
     </template> -->
    </Modal>
-   <div class="container-fluid ps-0 pe-0 ps-sm-2 pe-sm-2">
-      <form class="row sticky-top bg-gray-200 bg-gradient border-bottom border-2">
+
+   <form class="sticky-top bg-gray-200 bg-gradient border-bottom border-2">
+      <div class="container-fluid ps-0 pe-0 ps-sm-2 pe-sm-2 row">
          <fieldset class="col-auto mb-0 pe-2 ">
-            <legend class="col-form-label pt-0">Interval</legend>
+            <legend class="col-form-label pt-0 pb-0">Interval</legend>
             <div class="form-check">
                <input class="form-check-input" type="radio" id="rdbTzden" value="WEEK" v-model="picked">
                <label class="form-check-label" for="rdbTzden">
@@ -39,22 +40,22 @@ import EMT from './main.js';
             </div>
          </fieldset>
 
-         <fieldset class="col-auto mb-0 mt-4 pe-0 ps-0">
+         <fieldset class="col-auto mb-0 mt-3 pe-0 ps-0">
             <label class="col-auto d-block mb-4 mt-2">Od</label>
             <label class="col-auto">Do</label>
          </fieldset>
 
-         <fieldset class="col mb-0 ps-1 mt-4">
+         <fieldset class="col mb-0 ps-1 mt-3">
             <VueDatePicker :disabled="cp_disable_picker" id="dtpOD" class="picker mb-2" v-model="dpOD"></VueDatePicker>
             <VueDatePicker :disabled="cp_disable_picker" id="dtpDO" class="picker mb-2" v-model="dpDO"></VueDatePicker>
          </fieldset>
 
          <!-- align-self-end -->
 
-         <div class="col-sm-auto ps-2 mt-sm-4">
+         <div class="col-sm-auto ps-0 mt-sm-3">
             <div class="row mb-2">
                <label for="slZmena" class="col-2 col-sm-3 pe-0 col-form-label">Zmena</label>
-               <div class="col">
+               <div class="col pe-0">
                   <!--div.col mam AUTOMATICKY VHDONY PADDING => vnorene elementy su pekne odsadene od okrajov -->
                   <select class="form-select form-control" id="slZmena" aria-label="Default select example" v-model="myZmena">
                      <option value="VSETKY">VSETKY</option>
@@ -67,7 +68,7 @@ import EMT from './main.js';
 
             <div class="row mb-2">
                <label for="slPec" class="col-2 col-sm-3 pe-0 col-form-label">Pec</label>
-               <div class="col">
+               <div class="col pe-0">
                   <!--div.col mam AUTOMATICKY VHDONY PADDING => vnorene elementy su pekne odsadene od okrajov -->
                   <select class="form-select form-control" id="slPec" aria-label="Default select example" v-model="myPec">
                      <option value="PEC_A">PEC A</option>
@@ -83,7 +84,7 @@ import EMT from './main.js';
 
 
          <div class="row justify-content-center">
-            <button v-on:click="dajDataAPI" type="button" class="btn btn-primary ms-4" style="width:100%;">
+            <button v-on:click="dajDataAPI" type="button" class="btn btn-primary" style="width:100%;">
                <span v-show="!loading"> ZOBRAZ DATA</span>
                <span v-show="loading" class="spinner-border spinner-border me-2" style="vertical-align:middle"></span>
                <span v-show="loading" role="status" style="vertical-align:middle">LOADING...</span>
@@ -92,53 +93,55 @@ import EMT from './main.js';
 
          <a id="popoverButton" class="text-success mt-2" href="#" role="button" data-bs-toggle="popover" title="POZNAMKA"
             data-bs-content="Realne namerane hodnoty su reprezentovane farebnymi kruhovymi bodmi. Sive linie medzi vykreslenymi bodmi su LEN odhadovene hodnoty veliciny v danom case">POZNAMKA</a>
-      </form>
+      </div>
+   </form>
 
-      <!-- <div class="container-fluid"> -->
+   <!-- <div class="container-fluid"> -->
+   <div class="container-fluid ps-0 pe-0 ps-sm-2 pe-sm-2">
       <div class="row row-cols-1 row-cols-xxl-2">
          <!-- <div class="row"> -->
-         <div class="col ps-0 pe-0" v-show="zobraz.mojVykon">
+         <div class="chart col" v-show="zobraz.mojVykon">
             <MyBarChart :myChartData=myDataMojVykon :myChartOptions=myOptionsTimeComp v-on:click="showModal('POCITANY VYKON', myDataMojVykon, myOptionsTimeComp)"></MyBarChart>
          </div>
-         <div class="col" v-show="zobraz.DBVykon">
+         <div class="chart col" v-show="zobraz.DBVykon">
             <MyBarChart :myChartData=myDataDBVykon :myChartOptions=myOptionsTimeComp v-on:click="showModal('VYKON', myDataDBVykon, myOptionsTimeComp)"></MyBarChart>
          </div>
-         <div class="col" v-show="zobraz.okamzitaSpotreba">
+         <div class="chart col" v-show="zobraz.okamzitaSpotreba">
             <MyBarChart :myChartData=myDataSpotreba :myChartOptions=myOptionsTimeComp v-on:click="showModal('OKAMZITA SPOTREBA', myDataSpotreba, myOptionsTimeComp)"></MyBarChart>
          </div>
-         <div class="col position-relative" v-show="zobraz.spotrebaZmien">
+         <div class="chart col position-relative" v-show="zobraz.spotrebaZmien">
             <p ref="celkovaspotreba" class="spotreba-celkon border rounded-2 lh-1 p-1 fw-semibold text-bg-primary" v-show="zobraz.spotrebaZmien">SPOLU:
                {{ spotreba_celkom.toFixed(2) }} kWh</p>
             <BarChart :myChartData="myDataSpotrebaBAR"></BarChart>
          </div>
-         <div class="col" v-show="zobraz.napatie">
+         <div class="chart col" v-show="zobraz.napatie">
             <MyBarChart :myChartData=myDataNapatie :myChartOptions=myOptionsTimeComp v-on:click="showModal('NAPATIE', myDataNapatie, myOptionsTimeComp)"></MyBarChart>
          </div>
-         <div class="col" v-show="zobraz.prud">
+         <div class="chart col" v-show="zobraz.prud">
             <MyBarChart :myChartData=myDataPrud :myChartOptions=myOptionsTimeComp v-on:click="showModal('PRUD', myDataPrud, myOptionsTimeComp)"></MyBarChart>
          </div>
-         <div class="col" v-show="zobraz.teplotaVstup">
+         <div class="chart col" v-show="zobraz.teplotaVstup">
             <MyBarChart :myChartData=myDataVoda :myChartOptions=myOptionsTimeComp v-on:click="showModal('TEPLOTA VODY vstup / vystup', myDataVoda, myOptionsTimeComp)"></MyBarChart>
          </div>
-         <div class="col" v-show="zobraz.tlak">
+         <div class="chart col" v-show="zobraz.tlak">
             <MyBarChart :myChartData=myDataTlak :myChartOptions=myOptionsTimeComp v-on:click="showModal('TLAK', myDataTlak, myOptionsTimeComp)"></MyBarChart>
          </div>
-         <div class="col" v-show="zobraz.sobertVstup">
+         <div class="chart col" v-show="zobraz.sobertVstup">
             <MyBarChart :myChartData=myDataSobertVstup :myChartOptions=myOptionsTimeComp v-on:click="showModal('SOBERT VSTUP', myDataSobertVstup, myOptionsTimeComp)"></MyBarChart>
          </div>
-         <div class="col" v-show="zobraz.sobertVykon">
+         <div class="chart col" v-show="zobraz.sobertVykon">
             <MyBarChart :myChartData=myDataSobertVykon :myChartOptions=myOptionsTimeComp v-on:click="showModal('SOBERT VYKON', myDataSobertVykon, myOptionsTimeComp)"></MyBarChart>
          </div>
-         <div class="col" v-show="zobraz.rzPrisposobenie">
+         <div class="chart col" v-show="zobraz.rzPrisposobenie">
             <MyBarChart :myChartData=myDataRzPrisposobenie :myChartOptions=myOptionsTimeComp v-on:click="showModal('PRISPOSOBENIE', myDataRzPrisposobenie, myOptionsTimeComp)"></MyBarChart>
          </div>
-         <div class="col" v-show="zobraz.prietok">
+         <div class="chart col" v-show="zobraz.prietok">
             <MyBarChart :myChartData=myDataPrietok :myChartOptions=myOptionsTimeComp v-on:click="showModal('PRIETOK', myDataPrietok, myOptionsTimeComp)"></MyBarChart>
          </div>
-         <div class="col" v-show="zobraz.frekvencia">
+         <div class="chart col" v-show="zobraz.frekvencia">
             <MyBarChart :myChartData=myDataFrekvencia :myChartOptions=myOptionsTimeComp v-on:click="showModal('FREKVENCIA', myDataFrekvencia, myOptionsTimeComp)"></MyBarChart>
          </div>
-         <div class="col" v-show="zobraz.teplotaP1">
+         <div class="chart col" v-show="zobraz.teplotaP1">
             <MyBarChart :myChartData=myDataTeplotaP1P2Okruh :myChartOptions=myOptionsTimeComp
                v-on:click="showModal('TEPLOTA VODY  pec1 / pec2 / (primarny okruh)', myDataTeplotaP1P2Okruh, myOptionsTimeComp)"></MyBarChart>
          </div>
@@ -303,9 +306,10 @@ export default {
          this.zobraz = Helpers.ZobrazPec(this.myPec);
 
          //https://stackoverflow.com/questions/49257650/how-check-if-vue-is-in-development-mode
-         if (import.meta.env.DEV)
-            var URL = "https://localhost:7117/record/interval";
-         else var URL = "http://192.168.45.1:2030/record/interval";
+         //if (import.meta.env.DEV)
+         //  var URL = "https://localhost:7117/record/interval";
+         //else
+         var URL = "http://192.168.45.1:2030/record/interval";
          // var URL = "https://localhost:7117/record/interval?dateStart="+pOD+"&dateEnd="+pDO;
          axios
             //.get("https://localhost:7117/record/interval?dateStart=2023-10-16T12:00:00&dateEnd=2023-10-16T19:15:00")
@@ -532,5 +536,18 @@ export default {
    /* margin-bottom: -3rem; */
    /* margin-top: 1rem;  */
    /* font-size: calc(var(--bs-body-font-size)/1) */
+}
+
+.row {
+   margin-left: 0;
+   margin-right: 0;
+}
+
+
+@media (max-width: 576px) {
+   .chart.col {
+      padding-left: 0;
+      padding-right: 0;
+   }
 }
 </style>
