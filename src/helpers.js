@@ -1,5 +1,6 @@
-const DELTA = 5000; //[ms] predpokladany casovy interval medzi dvomi meraniami
+import moment from 'moment';
 
+const DELTA = 5000; //[ms] predpokladany casovy interval medzi dvomi meraniami
 
 export function ZobrazPec(pPec) {
 
@@ -16,6 +17,28 @@ export function ZobrazPec(pPec) {
         return result
 }
 
+//vytvori pol so zaciatkami vsetkych ZMIEN v ZADANOM INTERVALE <pOD, pDO>
+export function dajZaciatkyZmien(pOD, pDO) {
+
+        let ZMENY_ARR = [];
+        let firstDate = new Date(moment(pOD).format("YYYY-MM-DDT06:00:00"));
+        if (pOD > firstDate) firstDate = new Date(moment(pOD).format("YYYY-MM-DDT14:00:00"))
+        if (pOD > firstDate) firstDate = new Date(moment(pOD).format("YYYY-MM-DDT22:00:00"));
+        if (pOD > firstDate) firstDate = new Date(moment(moment(pOD).add(1, 'days')).format("YYYY-MM-DDT06:00:00"));
+        //console.log("pOD:{0}", pOD); console.log("firstDate:{0}", firstDate);
+
+        let pomDate = firstDate;
+        let index = 0;
+        //console.log('pomDate: {0}', firstDate);        
+        while (pomDate < pDO) {
+                //console.log('pomDate{0}', pomDate);
+                ZMENY_ARR.push(pomDate);
+                pomDate = moment(pomDate).add(8, 'hours');
+                index++;
+        }
+        //console.log('ZMENY_ARR:', ZMENY_ARR);
+        return ZMENY_ARR;
+}
 
 export function WeekBack(pDatum) {
 
@@ -85,19 +108,6 @@ export var DodajKrajneHodnoty = (pCasDolny, pCasHorny) => {
 export var DodajSpotrebu = (pRecords) => {
 
         var t0 = new Date();
-        var u0 = 0, i0 = 0;
-        //VYPCET VYKONU
-        for (let i = 0; i < pRecords.length; i++) {
-
-                let du = Math.abs(pRecords[i].napatie);
-                let di = Math.abs(pRecords[i].prud);
-
-                pRecords[i].mojvykon = (du * di).toFixed(2);
-
-
-                u0 = pRecords[i].napatie;
-                i0 = pRecords[i].prud;
-        }
 
         //VYPOCET SPOTREBY
         for (let i = 0; i < pRecords.length; i++) {
@@ -122,6 +132,32 @@ export var DodajSpotrebu = (pRecords) => {
                         u0 = pRecords[i].napatie;
                         i0 = pRecords[i].prud;
                 }
+        }
+}
+
+
+export var DodajSpotrebu2 = (pRecords) => {
+
+        var t0 = new Date();
+        var u0 = 0, i0 = 0;
+
+        //VYPOCET SPOTREBY
+        for (let i = 0; i < pRecords.length - 1; i++) {
+
+                pRecords[i].spotreba = u0 * i0 * dt / 1000;
+                pRecords[i].spotreba = Number.parseFloat((u0 * i0 * dt / 1000).toFixed(2));
+
+
+
+                let du = Math.abs(pRecords[i].napatie + u0) / 2;
+                let di = Math.abs(pRecords[i].prud + i0) / 2;
+                pRecords[i].spotreba = du * di * dt / 1000;
+                pRecords[i].spotreba = Number.parseFloat((du * di * dt / 1000).toFixed(2));
+
+                t0 = new Date(pRecords[i].dateTime);
+                u0 = pRecords[i].napatie;
+                i0 = pRecords[i].prud;
+
         }
 
 }

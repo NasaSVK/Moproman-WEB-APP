@@ -3,11 +3,11 @@ import VueDatePicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
 import moment from 'moment'
 import Modal from './components/Modal.vue'
-import EMT from './main.js';
+import EMT from './main.js'
 
 </script>
 <template>
-   <Modal :pChartData=myModalData :pChartOptions=myOptionsTimeComp2>
+   <Modal :pChartData=myModalData :pChartOptions=myOptionsTimeComp>
       <!-- <template v-slot:trigger v-on:click="test">
       <button class="btn btn-info" v-on:click="test"> Bootstrap modal </button>
     </template>
@@ -100,15 +100,15 @@ import EMT from './main.js';
    <div class="container-fluid ps-0 pe-0 ps-sm-2 pe-sm-2">
       <div class="row row-cols-1 row-cols-xxl-2">
          <!-- <div class="row"> -->
-         <div class="chart col" v-show="zobraz.mojVykon">
+         <!-- <div class="chart col" v-show="zobraz.mojVykon">
             <MyBarChart :myChartData=myDataMojVykon :myChartOptions=myOptionsTimeComp v-on:click="showModal('POCITANY VYKON', myDataMojVykon, myOptionsTimeComp)"></MyBarChart>
-         </div>
+         </div> -->
          <div class="chart col" v-show="zobraz.DBVykon">
             <MyBarChart :myChartData=myDataDBVykon :myChartOptions=myOptionsTimeComp v-on:click="showModal('VYKON', myDataDBVykon, myOptionsTimeComp)"></MyBarChart>
          </div>
-         <div class="chart col" v-show="zobraz.okamzitaSpotreba">
+         <!-- <div class="chart col" v-show="zobraz.okamzitaSpotreba">
             <MyBarChart :myChartData=myDataSpotreba :myChartOptions=myOptionsTimeComp v-on:click="showModal('OKAMZITA SPOTREBA', myDataSpotreba, myOptionsTimeComp)"></MyBarChart>
-         </div>
+         </div> -->
          <div class="chart col position-relative" v-show="zobraz.spotrebaZmien">
             <p ref="celkovaspotreba" class="spotreba-celkon border rounded-2 lh-1 p-1 fw-semibold text-bg-primary" v-show="zobraz.spotrebaZmien">SPOLU:
                {{ spotreba_celkom.toFixed(2) }} kWh</p>
@@ -168,6 +168,7 @@ import BarChart from './components/BarChart.vue'
 import LineChartAPI from './components/LineChartAPI.vue'
 import axios from 'axios'
 import * as Helpers from "./helpers"
+import * as dayjs from 'dayjs'
 //import * as bootstrap from 'bootstrap'
 //import 'bootstrap/scss/bootstrap.scss'
 
@@ -180,9 +181,10 @@ export default {
    //============================================ DATA ===================================================
    data() {
       const self = this;
-      return {
+      return {                  
+         dAnnotations:[],         
          zobraz: {
-            frekvencia: true, mojVykon: true, DBVykon: true, okamzitaSpotreba: true, spotrebaZmien: true, napatie: true, prud: true, tlak: true,
+            frekvencia: true, /*mojVykon: true,*/ DBVykon: true, /*okamzitaSpotreba: true,*/ spotrebaZmien: true, napatie: true, prud: true, tlak: true,
             sobertVstup: true, sobertVykon: true, rzPrisposobenie: true, prietok: true, teplotaVstup: true, teplotaP1: true, teplotaP2: true, teplotaOkruh: true
          },
          //zobraz: true,
@@ -194,7 +196,7 @@ export default {
          tDO: new Date(),
          tOD: new Date(),
 
-         dpDO: new Date(),
+         dpDO: new Date(Date.now()),
          dpOD: new Date().setHours(new Date().getHours() - 24),
 
          TimeBoundary: { minTime: "1970-01-01T00:00:00", maxTime: "1970-01-01T02:00:00" },
@@ -219,18 +221,18 @@ export default {
             labels: [0],
             datasets: [{ data: [0], label: "MODALNE DATA", backgroundColor: "#b34700" }]
          },
-         myDataMojVykon: {
-            labels: [0],
-            datasets: [{ data: [0], label: "POCITANY VYKON [W]", backgroundColor: "#33cc33" }]
-         },
+         // myDataMojVykon: {
+         //    labels: [0],
+         //    datasets: [{ data: [0], label: "POCITANY VYKON [kW]", backgroundColor: "#33cc33" }]
+         // },
          myDataDBVykon: {
             labels: [0],
-            datasets: [{ data: [0], label: "VYKON [W]", backgroundColor: "#339933" }]
+            datasets: [{ data: [0], label: "VYKON [kW]", backgroundColor: "#339933" }]
          },
-         myDataSpotreba: {
-            labels: [0],
-            datasets: [{ data: [0], label: "OKAMZITA SPOTREBA [Ws]", backgroundColor: "#ffbf00" }]
-         },
+         // myDataSpotreba: {
+         //    labels: [0],
+         //    datasets: [{ data: [0], label: "OKAMZITA SPOTREBA [Ws]", backgroundColor: "#ffbf00" }]
+         // },
          myDataSpotrebaBAR: {
             labels: [0],
             datasets: [{ data: [0], label: "SPOTREBA ZMIEN [kWh]", backgroundColor: "#ff944d", borderColor: "#b34700", borderWidth: 2 }]
@@ -251,11 +253,11 @@ export default {
          },
          myDataSobertVstup: {
             labels: [0],
-            datasets: [{ data: [0], label: "Sobert VSTUP [?]", backgroundColor: "#ffcccc" }]
+            datasets: [{ data: [0], label: "Sobert VSTUP [%]", backgroundColor: "#ffcccc" }]
          },
          myDataSobertVykon: {
             labels: [0],
-            datasets: [{ data: [0], label: "Sobert VYKON [W]", backgroundColor: "#ffcc99" }]
+            datasets: [{ data: [0], label: "Sobert VYKON [kW]", backgroundColor: "#ffcc99" }]
          },
          myDataVoda: {
             labels: [0],
@@ -267,11 +269,11 @@ export default {
          },
          myDataRzPrisposobenie: {
             labels: [0],
-            datasets: [{ data: [0], label: "RZPrisposobenie [Hz]", backgroundColor: "#804000" }]
+            datasets: [{ data: [0], label: "RZPrisposobenie [Ω]", backgroundColor: "#804000" }]
          },
          myDataPrietok: {
             labels: [0],
-            datasets: [{ data: [0], label: "PRIETOK [l/s]", backgroundColor: "#3399ff" }]
+            datasets: [{ data: [0], label: "PRIETOK [l/min]", backgroundColor: "#3399ff" }]
          },
          myDataTeplotaP1P2Okruh: {
             labels: [0],
@@ -284,22 +286,37 @@ export default {
    },
 
    //========================================== METHODS  =================================================
-   methods: {
-      // test() {
-      //   { console.log("AHOJ") }
-      // },
-
+   methods: {          
+      //funkcia naplni zdielane pole, ktoreho obasah sa pouzije pre plugin k ChartJS packageu "annotation" 
+      mGetArrAnnotations()
+      {  
+         //console.log("OD: {0}",this.dpOD); //console.log("DO: {0}",this.dpDO);
+         this.dAnnotations = [];
+         let zaciatkyZmien = Helpers.dajZaciatkyZmien(this.tOD, this.tDO);         
+         for(let zmenaDate of zaciatkyZmien){
+              //console.log('ZOBRAZOVANA LINIA ZMENY: {0}'+zmenaDate);
+              let newANNOTATION={ type: 'line',                 
+                             //xMin: new Date("2023-12-13T00:00:00"), //xMax: new Date("2023-12-13T00:00:00"),                                                                
+                                 xMin: zmenaDate,
+                                 xMax: zmenaDate,                                                                
+                                 borderColor: 'rgb(255, 99, 132, 0.6)',
+                                 borderWidth: 1};
+                     
+               this.dAnnotations.push(newANNOTATION);
+         }  
+         //console.log("dAnnotations: {0}", this.dAnnotations);
+      },      
       showModal(pTitle, pData, pOptions) {
-         console.log("Emitnuty globalny showModal");
-         console.log(pTitle);
+         //console.log("Emitnuty globalny showModal");
+         //console.log(pTitle);
          EMT.emit("showModal", pTitle, pData, pOptions);
          this.myModalData = pData;
-         console.log(pTitle);
+         //console.log(pTitle);
       },
       dajDataAPI() {
          console.warn("ODOSLANY GET REQUEST NA SERVER");
-         console.log(import.meta.env.DEV);
-         console.log(import.meta.env.PROD);
+         // console.log(import.meta.env.DEV);
+         // console.log(import.meta.env.PROD);
 
          this.loading = true;
          this.inicializujOdDo();
@@ -307,9 +324,9 @@ export default {
 
          //https://stackoverflow.com/questions/49257650/how-check-if-vue-is-in-development-mode
          //if (import.meta.env.DEV)
-         //  var URL = "https://localhost:7117/record/interval";
+         //var URL = "https://localhost:7117/record/interval";
          //else
-         var URL = "http://192.168.45.1:2030/record/interval";
+         var URL = "http://192.168.45.1:2031/record/interval";
          // var URL = "https://localhost:7117/record/interval?dateStart="+pOD+"&dateEnd="+pDO;
          axios
             //.get("https://localhost:7117/record/interval?dateStart=2023-10-16T12:00:00&dateEnd=2023-10-16T19:15:00")
@@ -326,41 +343,42 @@ export default {
             })
 
             .then((response) => {
-
+                              
                // SPOTREBA ZMIEN
                // --------------------------------------------------------------------------------------------------------------------------------------
-               console.info("DOSLI DATA ZO SERVERA \n [object Object] je jeden zaznam z DB \n");
-               console.log(response.data);
+               // console.info("DOSLI DATA ZO SERVERA \n [object Object] je jeden zaznam z DB \n");
+               // console.log(response.data);
                this.spotreba_celkom = 0;
-               Helpers.DodajSpotrebu(response.data);
+               //Helpers.DodajSpotrebu(response.data);
                //console.log("DATA SO SPOTREBOU: {0}", response.data);
                let PomLabels = ["ZMENA-1", "ZMENA-2", "ZMENA-3"]
                let PomData = PomLabels.map(zmenaa => {
                   var total = 0;
-                  response.data.forEach(rec => (rec.zmena == zmenaa) && (total += rec.spotreba));
+                  response.data.forEach(rec => (rec.zmena == zmenaa) && (total += rec.okamzitaSpotreba));
                   this.spotreba_celkom += total / KWH;
                   return total / KWH;
                })
-
-               //console.log("total:{0}", PomData);
+               PomLabels = ["RANNA", "DENNA", "NOCNA"]
+               console.log("total:{0}", PomData);
                this.myDataSpotrebaBAR = { labels: PomLabels, datasets: [{ data: PomData, label: "SPOTREBA ZMIEN [kWh]", backgroundColor: "#ff944d" }] }
                // --------------------------------------------------------------------------------------------------------------------------------------
                //CASOVA OS
-               let reducedData = Helpers.RedukujPocetHodnot(response.data, 200);
+               //let reducedData = Helpers.RedukujPocetHodnot(response.data, 200);
+               let reducedData = response.data;
                PomLabels = reducedData.map(rec => this.parsujDatum(rec.dateTime));
                this.TimeBoundary = Helpers.DodajKrajneHodnoty(new Date(PomLabels[0]), new Date(PomLabels[PomLabels.length - 1]));
 
                //POCITANY VYKON
-               PomData = reducedData.map(rec => rec.mojvykon);
-               this.myDataMojVykon = { labels: PomLabels, datasets: [{ data: PomData, label: "POCITANY VYKON [W]", backgroundColor: "#33cc33" }] }
+               // PomData = reducedData.map(rec => rec.mojvykon);
+               // this.myDataMojVykon = { labels: PomLabels, datasets: [{ data: PomData, label: "POCITANY VYKON [kW]", backgroundColor: "#33cc33" }] }
 
                //DB VYKON
                PomData = reducedData.map(rec => rec.vykon);
-               this.myDataDBVykon = { labels: PomLabels, datasets: [{ data: PomData, label: "VYKON [W]", backgroundColor: "#339933" }] }
+               this.myDataDBVykon = { labels: PomLabels, datasets: [{ data: PomData, label: "VYKON [kW]", backgroundColor: "#339933" }] }
 
                //OKAMZITA SPOTREBA
-               PomData = reducedData.map(rec => rec.spotreba);
-               this.myDataSpotreba = { labels: PomLabels, datasets: [{ data: PomData, label: "OKAMZITA SPOTREBA [Ws]", backgroundColor: "#ffbf00" }] }
+               // PomData = reducedData.map(rec => rec.spotreba);
+               // this.myDataSpotreba = { labels: PomLabels, datasets: [{ data: PomData, label: "OKAMZITA SPOTREBA [Ws]", backgroundColor: "#ffbf00" }] }
 
                //NAPATIE
                PomData = reducedData.map(rec => rec.napatie);
@@ -383,15 +401,15 @@ export default {
 
                //SOBERT VSTUP
                PomData = reducedData.map(rec => rec.sobertVstup);
-               this.myDataSobertVstup = { labels: PomLabels, datasets: [{ data: PomData, label: "SOBERT VSTUP [?]", backgroundColor: "#ffcccc" }] }
+               this.myDataSobertVstup = { labels: PomLabels, datasets: [{ data: PomData, label: "SOBERT VSTUP [%]", backgroundColor: "#ffcccc" }] }
 
                //SOBERT VYKON
                PomData = reducedData.map(rec => rec.sobertVykon);
-               this.myDataSobertVykon = { labels: PomLabels, datasets: [{ data: PomData, label: "SOBERT VYKON  [W]", backgroundColor: "#ffcc99" }] }
+               this.myDataSobertVykon = { labels: PomLabels, datasets: [{ data: PomData, label: "SOBERT VYKON  [kW]", backgroundColor: "#ffcc99" }] }
 
                //RZPRISPOSOBENIE
                PomData = reducedData.map(rec => rec.rzPribenie);
-               this.myDataRzPrisposobenie = { labels: PomLabels, datasets: [{ data: PomData, label: "RZ Prisposobenie [?/?]", backgroundColor: "#804000" }] }
+               this.myDataRzPrisposobenie = { labels: PomLabels, datasets: [{ data: PomData, label: "RZ Prisposobenie [Ω]", backgroundColor: "#804000" }] }
 
                //FREKVENCIA
                PomData = reducedData.map(rec => rec.frekvencia);
@@ -399,7 +417,7 @@ export default {
 
                //PRIETOK
                PomData = reducedData.map(rec => rec.prietokVody);
-               this.myDataPrietok = { labels: PomLabels, datasets: [{ data: PomData, label: "PRIETOK [l/s]", backgroundColor: "#3399ff" }] }
+               this.myDataPrietok = { labels: PomLabels, datasets: [{ data: PomData, label: "PRIETOK [l/min]", backgroundColor: "#3399ff" }] }
 
                //-------------------------------------------------------------------------------------------------------------------------------------------------------
                //TEPLOTA P1
@@ -419,6 +437,10 @@ export default {
                   labels: PomLabels, datasets: [{ data: PomData, label: "TEPLOTA P1 [°C]", backgroundColor: "#ff6666" },
                   { data: PomData1, label: "TEPLOTA P2 [°C]", backgroundColor: "#d65cad" }, { data: PomData2, label: "TEPLOTA OKRUH [°C]", backgroundColor: "#9933ff" }]
                }
+               
+               //NA ZAVER UROBIM a VYKRESLIM (pomocou CP) ZMENU STAVU pola dAnnotations => 'reaktivny framework: REAGUJE NA ZMENU STAVU, KTORY JE DANY data(){} OBJEKTOM'
+               //this.mGetArrAnnotations();
+               
                this.loading = false;
                //-------------------------------------------------------------------------------------------------------------------------------------------------------
             })
@@ -430,8 +452,11 @@ export default {
 
 
       parsujDatum(pDatum) {
-
          return moment(pDatum).format("YYYY-MM-DDTHH:mm:ss");
+      },
+      parsujDatumForSeries(pDatum) {
+
+         return moment(pDatum).format("DD.MM.YYYY HH:mm");
 
       },
       parsujDatumForLabels(pDatum) {
@@ -452,11 +477,11 @@ export default {
          //console.log('Font:' + 16 * WindowWidth / 1920 + "px");
          this.$refs.celkovaspotreba.style.fontSize = WindowWidth / 1320 + "rem";
       }
-
    },
    //========================================== MOUNTED =================================================
-   created() {
+   mounted() {
       window.onresize = this.pocitajSirku;
+      //this.mGetArrAnnotations();
    },
    //========================================== COMPUTED =================================================
    computed: {
@@ -476,48 +501,61 @@ export default {
                   min: this.TimeBoundary.minTime,//new Date("1970-01-01T00:00:00"),
                   type: 'time',
                   time: {
+                     format: "DD.MM.",
                      unit: "hour",
+                     tooltipFormat: 'DD.MM.yyyy HH:mm:ss',          
                      displayFormats: {
                         hour: "DD.MM HH[h]",
-                        minute: "DD.MM HH:mm"
+                        minute: "DD  HH:mm"
                      }
                   }
                }
             },
-            plugins: {
-               customCanvasBackgroundColor: {
-                  color: 'white',
-               }
-            }
+            //#region  PLUGINS + ANNOTATION 
+            //plugins: {
+               //customCanvasBackgroundColor: {
+               //   color: 'white',
+               //},
+               //annotation: {
+               //         drawTime: 'afterDatasetsDraw',
+               //         annotations: this.dAnnotations
+                        
+                        
+                        // [                          
+                        //     {
+                        //         // Indicates the type of annotation
+                        //         type: 'line',
+                        //         xMin: new Date("1970-01-01T00:02:00"),
+                        //         xMax: new Date("1970-01-01T00:02:00"),                         
+                        //         borderColor: 'rgb(255, 99, 132)',
+                        //         borderWidth: 3,
+                        //     }
+                        //    //  ,                
+                        //    //  {
+                        //    //      // Indicates the type of annotation
+                        //    //      type: 'line',
+                        //    //      //xMin: dayjs('1070-01-01T00:02:00').valueOf(),//new Date("1970-01-01T00:02:00"),
+                        //    //      //xMax: dayjs('1070-01-01T00:02:00').valueOf(),//new Date("1970-01-01T00:02:00"),
+                        //    //      yMin: -5,
+                        //    //      yMax: 5,
+                        //    //      borderColor: 'rgb(255, 99, 132)',
+                        //    //      borderWidth: 2,
+                        //    //  },
+                        //    //  {
+                        //    //      // Indicates the type of annotation
+                        //    //      type: 'line',
+                        //    //      //mode: 'vertical',                               
+                        //    //      //value: new Date("1970-01-01T00:01:00"),
+                        //    //      ///value:new Date("1970-01-01T00:03:00"),
+                        //    //      borderColor: 'rgb(255, 99, 132)',
+                        //    //      borderWidth: 3                 
+                        //    //  }
+                        // ]
+                    //}
+            //}
+            //#endregion
          }
-      }
-      ,
-
-      myOptionsTimeComp2() {
-         return {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-               x: {
-                  max: this.TimeBoundary.maxTime,//new Date("1970-01-01T02:00:00"),
-                  min: this.TimeBoundary.minTime,//new Date("1970-01-01T00:00:00"),
-                  type: 'time',
-                  time: {
-                     unit: "hour",
-                     displayFormats: {
-                        hour: "DD.MM HH[h]",
-                        minute: "DD.MM HH:mm"
-                     }
-                  }
-               }
-            },
-            plugins: {
-               customCanvasBackgroundColor: {
-                  color: 'white',
-               }
-            }
-         }
-      }
+      },      
    }
 }
 </script>

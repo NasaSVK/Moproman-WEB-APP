@@ -1,18 +1,25 @@
 <template>
-    <Bar id="my-chart-id" :options="myChartOptions" :data="myChartData" :plugins="this.plugin" />
+    <Bar id="my-chart-id" :options="cmpMyChartOptions" :data="myChartData" :plugins="this.plugin" />
 </template>
 
 <script>
-import { Bar } from 'vue-chartjs'
-import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale } from 'chart.js'
+import { Bar } from 'vue-chartjs';
+import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale } from 'chart.js';
+import annotationPlugin from 'chartjs-plugin-annotation';
+import * as dayjs from 'dayjs';
+import {dajZaciatkyZmien as DZZ} from "../helpers";
 
-ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale)
+ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale, annotationPlugin)
 
 export default {
+    
+    
     name: 'BarChart',
-    components: { Bar },
+    components: { Bar, dayjs },
     data() {
         return {
+            dAnnotations:[],
+            
             chartData: {
                 labels: ['January', 'February', 'March'],
                 datasets: [{ data: [40, 20, 12], backgroundColor: "#ff3399", label: "SPOTREBA ZMIEN" }]
@@ -35,6 +42,44 @@ export default {
         }
     },
 
+    methods: {
+        getAnnotations() {
+          let arrCasy = this.myChartData.labels;
+          let pOD = arrCasy[0];
+          let pDO  = arrCasy[arrCasy.length-1];
+          console.log("@@@ arrCasy:{0} @@@", arrCasy);
+          let arrAnnotations = DZZ(pOD,pDO);
+          console.log("@@@ pOD:{0} @@@", pOD);
+          console.log("@@@ pDO:{0} @@@", pDO);
+          console.log("@@@ arrAno:{0} @@@", arrAnnotations);
+          return arrAnnotations;
+        }
+    },
+
+    computed: {
+        cmpMyChartOptions(){
+            let newChartOptions =  this.myChartOptions;                        
+            // console.log("newChartOption: {0}",newChartOptions);
+            // newChartOptions.plugins.annotation.annotations = this.getAnnotations();
+            // console.log("newChartOptions.plugins.annotation.annotations: {0}",newChartOptions.plugins.annotation.annotations);
+            return newChartOptions;
+        },        
+        
+        cmpAnnotations() {
+            //console.log("myChartData:{0}", this.myChartData);
+            // let arrCasy = !myChartData??myChartData.default.labels;
+            // console.log("myChartData:{0}; arrCasy{1}:", myChartData, arrCasy);
+            // let pOD = arrCasy[0];
+            // let pDO  = arrCasy[arrCasy.length];
+            // let arrAnnotations = DZZ(pOD,pDO);
+            // console.log("@@@ pOD:{0}, pDO:{1}, arrAnnotations:{2} @@@", pOD, pDO, arrCasy);
+            // this.dAnnotations = arrAnnotations;
+            //return arrAnnotations;                        
+        }
+    },
+    
+    
+    
     props: {
         myChartData: {
             default: {
@@ -50,6 +95,45 @@ export default {
                 plugins: {
                     customCanvasBackgroundColor: {
                         color: 'white',
+                    },
+                     annotation: {
+                        annotations:[]
+                        // annotations: 
+                        // [
+                        //     {
+                        //         // Indicates the type of annotation
+                        //         type: 'line',
+                        //         xMin: -0.1,
+                        //         xMax: -0.1,
+                        //         yMin: 0,
+                        //         yMax: 1,
+                        //         borderColor: 'rgb(255, 99, 132)',
+                        //         borderWidth: 3,
+                        //     },                
+                        //     {
+                        //         // Indicates the type of annotation
+                        //         type: 'line',
+                        //         xMin: new Date("1970-01-01T00:01:00"),
+                        //         xMax: new Date("1970-01-01T00:01:00"),
+                        //         yMin: 0,
+                        //         yMax: 5,
+                        //         borderColor: 'rgb(255, 99, 132)',
+                        //         borderWidth: 2,
+                        //     },
+                        //     {
+                        //         // Indicates the type of annotation
+                        //         type: 'line',
+                        //         mode: 'vertical',                               
+                        //         value: dayjs('1070-01-01T01:00:00').valueOf(),
+                        //         borderColor: 'rgb(255, 99, 132)',
+                        //         borderWidth: 1,
+                        //         label: {
+                        //         enabled: true,
+                        //         position: "top",
+                        //         content: "somelabel"
+                        //         }
+                        //     }
+                        // ]
                     }
                 }
                 // title: {

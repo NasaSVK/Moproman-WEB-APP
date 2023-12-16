@@ -1,11 +1,12 @@
 <template>
-  <Line id="my-chart-id1" :data="myChartData" :options="myChartOptions" :plugins="this.plugin" />
+  <Line id="my-chart-id1" :data="myChartData" :options="cmpMyChartOptions" :plugins="this.plugin" />
 </template>
 
 <script>
 import { Line } from 'vue-chartjs'
 import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale, TimeScale } from 'chart.js'
 import 'chartjs-adapter-moment';
+import {dajZaciatkyZmien as DZZ} from "../helpers";
 
 ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale, TimeScale)
 
@@ -13,22 +14,61 @@ export default {
   name: 'MyBarChart',
   components: { Line },
   methods: {
-  },
-  data() {
-    return {
-      plugin: [{
-        id: 'customCanvasBackgroundColor',
-        beforeDraw: (chart, args, options) => {
-          const { ctx, chartArea: { left, top, width, height } } = chart;
-          ctx.save();
-          ctx.globalCompositeOperation = 'destination-over';
-          ctx.fillStyle = options.color || '#99ffff';
-          //ctx.fillRect(0, 0, chart.width, chart.height);
-          ctx.fillRect(left, top, width, height);
-          ctx.restore();
+    getAnnotations() {
+          let arrCasy = this.myChartData.labels;
+          let pOD = arrCasy[0];
+          let pDO  = arrCasy[arrCasy.length-1];
+          let zaciatkyZmien = DZZ(new Date(pOD), new Date(pDO));
+          let arrAnnotations = [];
+          //console.log("@@@ arrCasy:", arrCasy);console.log("@@@ pOD:", pOD);console.log("@@@ pDO:", pDO);          
+          for(let zmenaDate of zaciatkyZmien){
+              let newANNOTATION =  { type: 'line',                                                                                    
+                                      xMin: zmenaDate,
+                                      xMax: zmenaDate,                                                                
+                                      borderColor: 'rgb(255, 99, 132, 0.6)',
+                                      borderWidth: 1};
+                     
+               arrAnnotations.push(newANNOTATION);
+         }
+          //console.log("@@@ arrAno:", arrAnnotations);
+          return arrAnnotations;
         }
-      }]
-    }
+  },
+
+  computed: {
+    cmpMyChartOptions(){                        
+                  let plugins= {
+                    
+                    customCanvasBackgroundColor: {
+                    color: 'white',
+                      },
+                      annotation: {
+                                  drawTime: 'afterDatasetsDraw',
+                                  annotations: this.getAnnotations()
+                                }
+                        }              
+                      this.myChartOptions.plugins = plugins;         
+                      //if (this.myChartOptions.plugins.annotation)
+                        // this.myChartOptions.plugins.annotation.annotations = this.getAnnotations();                       
+                    return this.myChartOptions;
+      } 
+    },
+
+    data() {
+      return {
+        plugin: [{
+          id: 'customCanvasBackgroundColor',
+          beforeDraw: (chart, args, options) => {
+            const { ctx, chartArea: { left, top, width, height } } = chart;
+            ctx.save();
+            ctx.globalCompositeOperation = 'destination-over';
+            ctx.fillStyle = options.color || '#99ffff';
+            //ctx.fillRect(0, 0, chart.width, chart.height);
+            ctx.fillRect(left, top, width, height);
+            ctx.restore();
+          }
+        }]
+      }
   },
 
   props: {
@@ -58,11 +98,14 @@ export default {
         plugins: {
           customCanvasBackgroundColor: {
             color: 'white',
-          }
+          },
+          annotation: {
+                        drawTime: 'afterDatasetsDraw',
+                        annotations: []
+                }
         },
         scales: {
           x: {
-            //min: '2021-11-01T00:00:00',
             type: 'time',
             time: {
               unit: "day"
