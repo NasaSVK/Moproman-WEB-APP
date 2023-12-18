@@ -7,14 +7,11 @@ import EMT from '../main.js';
 </script>
 <template>
    <div class="AHOJ">
-      <!-- <slot name="trigger" v-on:click="test"></slot> -->
-      <!-- <slot name="target"></slot> -->
-      <!-- <button class="btn btn-info" ref="trigger"> Bootstrap modal </button> -->
       <div ref="target" class="modal" tabindex="-1">
          <div class="modal-dialog modal-fullscreen">
             <div class="modal-content">
                <div class="modal-body">
-                  <MyBarChart :myChartData=pChartData :myChartOptions=pChartOptions ></MyBarChart>
+                  <MyBarChart :pChartData=dChartData :myChartOptions=dChartOptions ></MyBarChart>
                </div>
                <div class="modal-header">
                   <h5 class="modal-title">{{ dTitle }}</h5>
@@ -65,7 +62,9 @@ export default {
             labels: [0],
             datasets: [{ data: [0], label: "POCITANY VYKON [W]", backgroundColor: "#33cc33" }]
          },
-         dTitle: ""
+         dTitle: "",
+         dChartData:this.pChartData,
+         dChartOptions:this.pChartOptions
       }
    },
    methods: {
@@ -79,9 +78,11 @@ export default {
       EMT.on('showModal', (title, data, options) => {
 
          this.dTitle = title;
-
+         this.dChartData = data;
+         this.dChartOptions = options;
 
          var theModal = new Modal(this.$refs.target, {})
+
 
          theModal.show()
       })

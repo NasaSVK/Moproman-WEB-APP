@@ -7,14 +7,7 @@ import EMT from './main.js'
 
 </script>
 <template>
-   <Modal :pChartData=myModalData :pChartOptions=myOptionsTimeComp>
-      <!-- <template v-slot:trigger v-on:click="test">
-      <button class="btn btn-info" v-on:click="test"> Bootstrap modal </button>
-    </template>
-    <template v-slot:target>
-      <button class="btn btn-info"> Bootstrap modal </button>
-    </template> -->
-   </Modal>
+   <Modal :pChartData=myModalData :pChartOptions=myModalOptions></Modal>
 
    <form class="sticky-top bg-gray-200 bg-gradient border-bottom border-2">
       <div class="container-fluid ps-0 pe-0 ps-sm-2 pe-sm-2 row">
@@ -96,67 +89,54 @@ import EMT from './main.js'
       </div>
    </form>
 
-   <!-- <div class="container-fluid"> -->
+
    <div class="container-fluid ps-0 pe-0 ps-sm-2 pe-sm-2">
       <div class="row row-cols-1 row-cols-xxl-2">
-         <!-- <div class="row"> -->
          <!-- <div class="chart col" v-show="zobraz.mojVykon">
-            <MyBarChart :myChartData=myDataMojVykon :myChartOptions=myOptionsTimeComp v-on:click="showModal('POCITANY VYKON', myDataMojVykon, myOptionsTimeComp)"></MyBarChart>
+            <MyBarChart :pChartData=myDataMojVykon :myChartOptions=myOptionsTimeComp v-on:click="showModal('POCITANY VYKON', myDataMojVykon, myOptionsTimeComp)"></MyBarChart>
          </div> -->
          <div class="chart col" v-show="zobraz.DBVykon">
-            <MyBarChart :myChartData=myDataDBVykon :myChartOptions=myOptionsTimeComp v-on:click="showModal('VYKON', myDataDBVykon, myOptionsTimeComp)"></MyBarChart>
+            <MyBarChart :pChartData=myDataDBVykon :myChartOptions=myOptionsTimeComp v-on:click="showModal('VYKON', myDataDBVykon, myOptionsTimeComp)"></MyBarChart>
          </div>
          <!-- <div class="chart col" v-show="zobraz.okamzitaSpotreba">
-            <MyBarChart :myChartData=myDataSpotreba :myChartOptions=myOptionsTimeComp v-on:click="showModal('OKAMZITA SPOTREBA', myDataSpotreba, myOptionsTimeComp)"></MyBarChart>
+            <MyBarChart :pChartData=myDataSpotreba :myChartOptions=myOptionsTimeComp v-on:click="showModal('OKAMZITA SPOTREBA', myDataSpotreba, myOptionsTimeComp)"></MyBarChart>
          </div> -->
          <div class="chart col position-relative" v-show="zobraz.spotrebaZmien">
             <p ref="celkovaspotreba" class="spotreba-celkon border rounded-2 lh-1 p-1 fw-semibold text-bg-primary" v-show="zobraz.spotrebaZmien">SPOLU:
                {{ spotreba_celkom.toFixed(2) }} kWh</p>
-            <BarChart :myChartData="myDataSpotrebaBAR"></BarChart>
+            <BarChart :pChartData="myDataSpotrebaBAR"></BarChart>
          </div>
          <div class="chart col" v-show="zobraz.napatie">
-            <MyBarChart :myChartData=myDataNapatie :myChartOptions=myOptionsTimeComp v-on:click="showModal('NAPATIE', myDataNapatie, myOptionsTimeComp)"></MyBarChart>
+            <MyBarChart :pChartData=myDataNapatie :myChartOptions=myOptionsTimeComp v-on:click="showModal('NAPATIE', myDataNapatie, myOptionsTimeComp)"></MyBarChart>
          </div>
          <div class="chart col" v-show="zobraz.prud">
-            <MyBarChart :myChartData=myDataPrud :myChartOptions=myOptionsTimeComp v-on:click="showModal('PRUD', myDataPrud, myOptionsTimeComp)"></MyBarChart>
+            <MyBarChart :pChartData=myDataPrud :myChartOptions=myOptionsTimeComp v-on:click="showModal('PRUD', myDataPrud, myOptionsTimeComp)"></MyBarChart>
          </div>
          <div class="chart col" v-show="zobraz.teplotaVstup">
-            <MyBarChart :myChartData=myDataVoda :myChartOptions=myOptionsTimeComp v-on:click="showModal('TEPLOTA VODY vstup / vystup', myDataVoda, myOptionsTimeComp)"></MyBarChart>
+            <MyBarChart :pChartData=myDataVoda :myChartOptions=myOptionsTimeComp v-on:click="showModal('TEPLOTA VODY vstup / vystup', myDataVoda, myOptionsTimeComp)"></MyBarChart>
          </div>
          <div class="chart col" v-show="zobraz.tlak">
-            <MyBarChart :myChartData=myDataTlak :myChartOptions=myOptionsTimeComp v-on:click="showModal('TLAK', myDataTlak, myOptionsTimeComp)"></MyBarChart>
+            <MyBarChart :pChartData=myDataTlak :myChartOptions=myOptionsTimeComp v-on:click="showModal('TLAK', myDataTlak, myOptionsTimeComp)"></MyBarChart>
          </div>
          <div class="chart col" v-show="zobraz.sobertVstup">
-            <MyBarChart :myChartData=myDataSobertVstup :myChartOptions=myOptionsTimeComp v-on:click="showModal('SOBERT VSTUP', myDataSobertVstup, myOptionsTimeComp)"></MyBarChart>
+            <MyBarChart :pChartData=myDataSobertVstup :myChartOptions=myOptionsTimeComp v-on:click="showModal('SOBERT VSTUP', myDataSobertVstup, myOptionsTimeComp)"></MyBarChart>
          </div>
          <div class="chart col" v-show="zobraz.sobertVykon">
-            <MyBarChart :myChartData=myDataSobertVykon :myChartOptions=myOptionsTimeComp v-on:click="showModal('SOBERT VYKON', myDataSobertVykon, myOptionsTimeComp)"></MyBarChart>
+            <MyBarChart :pChartData=myDataSobertVykon :myChartOptions=myOptionsTimeComp v-on:click="showModal('SOBERT VYKON', myDataSobertVykon, myOptionsTimeComp)"></MyBarChart>
          </div>
          <div class="chart col" v-show="zobraz.rzPrisposobenie">
-            <MyBarChart :myChartData=myDataRzPrisposobenie :myChartOptions=myOptionsTimeComp v-on:click="showModal('PRISPOSOBENIE', myDataRzPrisposobenie, myOptionsTimeComp)"></MyBarChart>
+            <MyBarChart :pChartData=myDataRzPrisposobenie :myChartOptions=myOptionsTimeComp v-on:click="showModal('PRISPOSOBENIE', myDataRzPrisposobenie, myOptionsTimeComp)"></MyBarChart>
          </div>
          <div class="chart col" v-show="zobraz.prietok">
-            <MyBarChart :myChartData=myDataPrietok :myChartOptions=myOptionsTimeComp v-on:click="showModal('PRIETOK', myDataPrietok, myOptionsTimeComp)"></MyBarChart>
+            <MyBarChart :pChartData=myDataPrietok :myChartOptions=myOptionsTimeComp v-on:click="showModal('PRIETOK', myDataPrietok, myOptionsTimeComp)"></MyBarChart>
          </div>
          <div class="chart col" v-show="zobraz.frekvencia">
-            <MyBarChart :myChartData=myDataFrekvencia :myChartOptions=myOptionsTimeComp v-on:click="showModal('FREKVENCIA', myDataFrekvencia, myOptionsTimeComp)"></MyBarChart>
+            <MyBarChart :pChartData=myDataFrekvencia :myChartOptions=myOptionsTimeComp v-on:click="showModal('FREKVENCIA', myDataFrekvencia, myOptionsTimeComp)"></MyBarChart>
          </div>
          <div class="chart col" v-show="zobraz.teplotaP1">
-            <MyBarChart :myChartData=myDataTeplotaP1P2Okruh :myChartOptions=myOptionsTimeComp
+            <MyBarChart :pChartData=myDataTeplotaP1P2Okruh :myChartOptions=myOptionsTimeComp
                v-on:click="showModal('TEPLOTA VODY  pec1 / pec2 / (primarny okruh)', myDataTeplotaP1P2Okruh, myOptionsTimeComp)"></MyBarChart>
-         </div>
-         <!-- <div class="col" v-show="this.zobraz.teplotaP1">
-        <MyBarChart :myChartData=this.myDataTeplotaP1 :myChartOptions=this.myOptionsTimeComp>
-        </MyBarChart>
-      </div>
-      <div class="col" v-show="this.zobraz.teplotaP2">
-        <MyBarChart :myChartData=this.myDataTeplotaP2 :myChartOptions=this.myOptionsTimeComp>
-        </MyBarChart>
-      </div>
-      <div class="col" v-show="this.zobraz.teplotaOkruh">
-        <MyBarChart :myChartData=this.myDataTeplotaOkruh :myChartOptions=this.myOptionsTimeComp>
-        </MyBarChart>
-      </div> -->
+         </div>         
       </div>
    </div>
 </template>
@@ -221,6 +201,24 @@ export default {
             labels: [0],
             datasets: [{ data: [0], label: "MODALNE DATA", backgroundColor: "#b34700" }]
          },
+          myModalOptions: {
+            scales: {
+               x: {
+                  //max: this.TimeBoundary.maxTime,//new Date("1970-01-01T02:00:00"),
+                  //min: this.TimeBoundary.minTime,//new Date("1970-01-01T00:00:00"),
+                  type: 'time',
+                  time: {
+                     unit: "hour",
+                     displayFormats: {
+                        hour: "DD.MM. | HH:mm",
+                        minute: "DD.MM. | HH:mm"
+                     }
+                  }
+               }
+            }
+         },
+
+
          // myDataMojVykon: {
          //    labels: [0],
          //    datasets: [{ data: [0], label: "POCITANY VYKON [kW]", backgroundColor: "#33cc33" }]
@@ -296,7 +294,7 @@ export default {
          for(let zmenaDate of zaciatkyZmien){
               //console.log('ZOBRAZOVANA LINIA ZMENY: {0}'+zmenaDate);
               let newANNOTATION={ type: 'line',                 
-                             //xMin: new Date("2023-12-13T00:00:00"), //xMax: new Date("2023-12-13T00:00:00"),                                                                
+                                 //xMin: new Date("2023-12-13T00:00:00"), //xMax: new Date("2023-12-13T00:00:00"),                                                                
                                  xMin: zmenaDate,
                                  xMax: zmenaDate,                                                                
                                  borderColor: 'rgb(255, 99, 132, 0.6)',
@@ -304,14 +302,12 @@ export default {
                      
                this.dAnnotations.push(newANNOTATION);
          }  
-         //console.log("dAnnotations: {0}", this.dAnnotations);
+         //console.log("dAnnotations: ", this.dAnnotations);
       },      
       showModal(pTitle, pData, pOptions) {
          //console.log("Emitnuty globalny showModal");
-         //console.log(pTitle);
          EMT.emit("showModal", pTitle, pData, pOptions);
-         this.myModalData = pData;
-         //console.log(pTitle);
+         //this.myModalData = pData;
       },
       dajDataAPI() {
          console.warn("ODOSLANY GET REQUEST NA SERVER");

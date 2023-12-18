@@ -1,5 +1,5 @@
 <template>
-  <Line id="my-chart-id1" :data="myChartData" :options="cmpMyChartOptions" :plugins="this.plugin" />
+  <Line id="my-chart-id1" :data="pChartData" :options="cmpMyChartOptions" :plugins="this.plugin" />
 </template>
 
 <script>
@@ -15,7 +15,8 @@ export default {
   components: { Line },
   methods: {
     getAnnotations() {
-          let arrCasy = this.myChartData.labels;
+          let arrCasy = this.pChartData.labels;
+          if (!arrCasy) return [];
           let pOD = arrCasy[0];
           let pDO  = arrCasy[arrCasy.length-1];
           let zaciatkyZmien = DZZ(new Date(pOD), new Date(pDO));
@@ -25,7 +26,7 @@ export default {
               let newANNOTATION =  { type: 'line',                                                                                    
                                       xMin: zmenaDate,
                                       xMax: zmenaDate,                                                                
-                                      borderColor: 'rgb(255, 99, 132, 0.6)',
+                                      bqorderColor: 'rgb(255, 99, 132, 0.6)',
                                       borderWidth: 1};
                      
                arrAnnotations.push(newANNOTATION);
@@ -47,9 +48,7 @@ export default {
                                   annotations: this.getAnnotations()
                                 }
                         }              
-                      this.myChartOptions.plugins = plugins;         
-                      //if (this.myChartOptions.plugins.annotation)
-                        // this.myChartOptions.plugins.annotation.annotations = this.getAnnotations();                       
+                      this.myChartOptions.plugins = plugins;                           
                     return this.myChartOptions;
       } 
     },
@@ -86,7 +85,7 @@ export default {
       type: Date,
       default: new Date(2023, 12, 31),
     },
-    myChartData: {
+    pChartData: {
       type: Object,
       required: true
     },

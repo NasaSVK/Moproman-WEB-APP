@@ -1,5 +1,5 @@
 <template>
-    <Bar id="my-chart-id" :options="cmpMyChartOptions" :data="myChartData" :plugins="this.plugin" />
+    <Bar id="my-chart-id" :options="cmpMyChartOptions" :data="pChartData" :plugins="this.plugin" />
 </template>
 
 <script>
@@ -44,7 +44,7 @@ export default {
 
     methods: {
         getAnnotations() {
-          let arrCasy = this.myChartData.labels;
+          let arrCasy = this.pChartData.labels;
           let pOD = arrCasy[0];
           let pDO  = arrCasy[arrCasy.length-1];
           console.log("@@@ arrCasy:{0} @@@", arrCasy);
@@ -59,29 +59,14 @@ export default {
     computed: {
         cmpMyChartOptions(){
             let newChartOptions =  this.myChartOptions;                        
-            // console.log("newChartOption: {0}",newChartOptions);
-            // newChartOptions.plugins.annotation.annotations = this.getAnnotations();
-            // console.log("newChartOptions.plugins.annotation.annotations: {0}",newChartOptions.plugins.annotation.annotations);
             return newChartOptions;
         },        
         
-        cmpAnnotations() {
-            //console.log("myChartData:{0}", this.myChartData);
-            // let arrCasy = !myChartData??myChartData.default.labels;
-            // console.log("myChartData:{0}; arrCasy{1}:", myChartData, arrCasy);
-            // let pOD = arrCasy[0];
-            // let pDO  = arrCasy[arrCasy.length];
-            // let arrAnnotations = DZZ(pOD,pDO);
-            // console.log("@@@ pOD:{0}, pDO:{1}, arrAnnotations:{2} @@@", pOD, pDO, arrCasy);
-            // this.dAnnotations = arrAnnotations;
-            //return arrAnnotations;                        
-        }
     },
     
-    
-    
+      
     props: {
-        myChartData: {
+        pChartData: {
             default: {
                 labels: ['January', 'February', 'March'],
                 datasets: [{ data: [40, 20, 12], backgroundColor: "#00bfff", label: "SPOTREBABAR" }]
