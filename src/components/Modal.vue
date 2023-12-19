@@ -129,6 +129,10 @@ export default {
 .modal-dialog {
    width: 100%;
    height: auto;
+}
 
+.modal-body {
+   padding-top: 0;
+   padding-bottom: 0;
 }
 </style>

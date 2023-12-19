@@ -33,7 +33,7 @@ export function dajZaciatkyZmien(pOD, pDO) {
         while (pomDate < pDO) {
                 //console.log('pomDate{0}', pomDate);
                 ZMENY_ARR.push(pomDate);
-                pomDate = moment(pomDate).add(8, 'hours');
+                pomDate = moment(pomDate).add(480, 'minutes');
                 index++;
         }
         //console.log('ZMENY_ARR:', ZMENY_ARR);
@@ -102,62 +102,4 @@ export var DodajKrajneHodnoty = (pCasDolny, pCasHorny) => {
         pCasHorny.setSeconds(0);
 
         return { minTime: pCasDolny, maxTime: pCasHorny }
-}
-
-
-export var DodajSpotrebu = (pRecords) => {
-
-        var t0 = new Date();
-
-        //VYPOCET SPOTREBY
-        for (let i = 0; i < pRecords.length; i++) {
-                let dt = DELTA;
-                if (i == 0) {
-                        u0 = pRecords[i].napatie;
-                        i0 = pRecords[i].prud;
-                        pRecords[i].spotreba = u0 * i0 * dt / 1000;
-                        pRecords[i].spotreba = Number.parseFloat((u0 * i0 * dt / 1000).toFixed(2));
-                }
-                else {
-                        let du = Math.abs(pRecords[i].napatie + u0) / 2;
-                        let di = Math.abs(pRecords[i].prud + i0) / 2;
-                        pRecords[i].spotreba = du * di * dt / 1000;
-                        pRecords[i].spotreba = Number.parseFloat((du * di * dt / 1000).toFixed(2));
-                        //pRecords[i].spotreba = Math.round(du * di * dt / 10) / 100;
-                        //pRecords[i].spotreba = ((du*di*dt/1000).toFixed(2));
-                        //console.log((pRecords[i].spotreba));
-                        //console.log("SPOTREBA:{0},{1},{2},{3} \n",pRecords[i].spotreba,du,di,dt);
-
-                        t0 = new Date(pRecords[i].dateTime);
-                        u0 = pRecords[i].napatie;
-                        i0 = pRecords[i].prud;
-                }
-        }
-}
-
-
-export var DodajSpotrebu2 = (pRecords) => {
-
-        var t0 = new Date();
-        var u0 = 0, i0 = 0;
-
-        //VYPOCET SPOTREBY
-        for (let i = 0; i < pRecords.length - 1; i++) {
-
-                pRecords[i].spotreba = u0 * i0 * dt / 1000;
-                pRecords[i].spotreba = Number.parseFloat((u0 * i0 * dt / 1000).toFixed(2));
-
-
-
-                let du = Math.abs(pRecords[i].napatie + u0) / 2;
-                let di = Math.abs(pRecords[i].prud + i0) / 2;
-                pRecords[i].spotreba = du * di * dt / 1000;
-                pRecords[i].spotreba = Number.parseFloat((du * di * dt / 1000).toFixed(2));
-
-                t0 = new Date(pRecords[i].dateTime);
-                u0 = pRecords[i].napatie;
-                i0 = pRecords[i].prud;
-
-        }
-
 }

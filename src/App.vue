@@ -96,7 +96,7 @@ import EMT from './main.js'
             <MyBarChart :pChartData=myDataMojVykon :myChartOptions=myOptionsTimeComp v-on:click="showModal('POCITANY VYKON', myDataMojVykon, myOptionsTimeComp)"></MyBarChart>
          </div> -->
          <div class="chart col" v-show="zobraz.DBVykon">
-            <MyBarChart :pChartData=myDataDBVykon :myChartOptions=myOptionsTimeComp v-on:click="showModal('VYKON', myDataDBVykon, myOptionsTimeComp)"></MyBarChart>
+            <MyBarChart :pChartData=myDataDBVykon :myChartOptions=myOptionsTimeComp v-on:click="showModal('VYKON [kW]', myDataDBVykon, myOptionsTimeComp)"></MyBarChart>
          </div>
          <!-- <div class="chart col" v-show="zobraz.okamzitaSpotreba">
             <MyBarChart :pChartData=myDataSpotreba :myChartOptions=myOptionsTimeComp v-on:click="showModal('OKAMZITA SPOTREBA', myDataSpotreba, myOptionsTimeComp)"></MyBarChart>
@@ -107,35 +107,35 @@ import EMT from './main.js'
             <BarChart :pChartData="myDataSpotrebaBAR"></BarChart>
          </div>
          <div class="chart col" v-show="zobraz.napatie">
-            <MyBarChart :pChartData=myDataNapatie :myChartOptions=myOptionsTimeComp v-on:click="showModal('NAPATIE', myDataNapatie, myOptionsTimeComp)"></MyBarChart>
+            <MyBarChart :pChartData=myDataNapatie :myChartOptions=myOptionsTimeComp v-on:click="showModal('NAPATIE [V]', myDataNapatie, myOptionsTimeComp)"></MyBarChart>
          </div>
          <div class="chart col" v-show="zobraz.prud">
-            <MyBarChart :pChartData=myDataPrud :myChartOptions=myOptionsTimeComp v-on:click="showModal('PRUD', myDataPrud, myOptionsTimeComp)"></MyBarChart>
+            <MyBarChart :pChartData=myDataPrud :myChartOptions=myOptionsTimeComp v-on:click="showModal('PRUD [A]', myDataPrud, myOptionsTimeComp)"></MyBarChart>
          </div>
          <div class="chart col" v-show="zobraz.teplotaVstup">
-            <MyBarChart :pChartData=myDataVoda :myChartOptions=myOptionsTimeComp v-on:click="showModal('TEPLOTA VODY vstup / vystup', myDataVoda, myOptionsTimeComp)"></MyBarChart>
+            <MyBarChart :pChartData=myDataVoda :myChartOptions=myOptionsTimeComp v-on:click="showModal('TEPLOTA VODY vstup / vystup [°C]', myDataVoda, myOptionsTimeComp)"></MyBarChart>
          </div>
          <div class="chart col" v-show="zobraz.tlak">
-            <MyBarChart :pChartData=myDataTlak :myChartOptions=myOptionsTimeComp v-on:click="showModal('TLAK', myDataTlak, myOptionsTimeComp)"></MyBarChart>
+            <MyBarChart :pChartData=myDataTlak :myChartOptions=myOptionsTimeComp v-on:click="showModal('TLAK [Pa]', myDataTlak, myOptionsTimeComp)"></MyBarChart>
          </div>
          <div class="chart col" v-show="zobraz.sobertVstup">
-            <MyBarChart :pChartData=myDataSobertVstup :myChartOptions=myOptionsTimeComp v-on:click="showModal('SOBERT VSTUP', myDataSobertVstup, myOptionsTimeComp)"></MyBarChart>
+            <MyBarChart :pChartData=myDataSobertVstup :myChartOptions=myOptionsTimeComp v-on:click="showModal('SOBERT VSTUP [%]', myDataSobertVstup, myOptionsTimeComp)"></MyBarChart>
          </div>
          <div class="chart col" v-show="zobraz.sobertVykon">
-            <MyBarChart :pChartData=myDataSobertVykon :myChartOptions=myOptionsTimeComp v-on:click="showModal('SOBERT VYKON', myDataSobertVykon, myOptionsTimeComp)"></MyBarChart>
+            <MyBarChart :pChartData=myDataSobertVykon :myChartOptions=myOptionsTimeComp v-on:click="showModal('SOBERT VYKON [kW]', myDataSobertVykon, myOptionsTimeComp)"></MyBarChart>
          </div>
          <div class="chart col" v-show="zobraz.rzPrisposobenie">
-            <MyBarChart :pChartData=myDataRzPrisposobenie :myChartOptions=myOptionsTimeComp v-on:click="showModal('PRISPOSOBENIE', myDataRzPrisposobenie, myOptionsTimeComp)"></MyBarChart>
+            <MyBarChart :pChartData=myDataRzPrisposobenie :myChartOptions=myOptionsTimeComp v-on:click="showModal('RZ PRISPOSOBENIE [Ω]', myDataRzPrisposobenie, myOptionsTimeComp)"></MyBarChart>
          </div>
          <div class="chart col" v-show="zobraz.prietok">
-            <MyBarChart :pChartData=myDataPrietok :myChartOptions=myOptionsTimeComp v-on:click="showModal('PRIETOK', myDataPrietok, myOptionsTimeComp)"></MyBarChart>
+            <MyBarChart :pChartData=myDataPrietok :myChartOptions=myOptionsTimeComp v-on:click="showModal('PRIETOK [l/min]', myDataPrietok, myOptionsTimeComp)"></MyBarChart>
          </div>
          <div class="chart col" v-show="zobraz.frekvencia">
-            <MyBarChart :pChartData=myDataFrekvencia :myChartOptions=myOptionsTimeComp v-on:click="showModal('FREKVENCIA', myDataFrekvencia, myOptionsTimeComp)"></MyBarChart>
+            <MyBarChart :pChartData=myDataFrekvencia :myChartOptions=myOptionsTimeComp v-on:click="showModal('FREKVENCIA [Hz]', myDataFrekvencia, myOptionsTimeComp)"></MyBarChart>
          </div>
          <div class="chart col" v-show="zobraz.teplotaP1">
             <MyBarChart :pChartData=myDataTeplotaP1P2Okruh :myChartOptions=myOptionsTimeComp
-               v-on:click="showModal('TEPLOTA VODY  pec1 / pec2 / (primarny okruh)', myDataTeplotaP1P2Okruh, myOptionsTimeComp)"></MyBarChart>
+               v-on:click="showModal('TEPLOTA VODY pec1 / pec2 / (primarny okruh) [°C]', myDataTeplotaP1P2Okruh, myOptionsTimeComp)"></MyBarChart>
          </div>         
       </div>
    </div>
@@ -297,7 +297,7 @@ export default {
                                  //xMin: new Date("2023-12-13T00:00:00"), //xMax: new Date("2023-12-13T00:00:00"),                                                                
                                  xMin: zmenaDate,
                                  xMax: zmenaDate,                                                                
-                                 borderColor: 'rgb(255, 99, 132, 0.6)',
+                                 borderColor: 'rgb(255, 99, 132, 0.5)',
                                  borderWidth: 1};
                      
                this.dAnnotations.push(newANNOTATION);

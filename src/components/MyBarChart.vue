@@ -26,7 +26,7 @@ export default {
               let newANNOTATION =  { type: 'line',                                                                                    
                                       xMin: zmenaDate,
                                       xMax: zmenaDate,                                                                
-                                      bqorderColor: 'rgb(255, 99, 132, 0.6)',
+                                      borderColor: 'rgb(255, 99, 132, 0.5)',
                                       borderWidth: 1};
                      
                arrAnnotations.push(newANNOTATION);
