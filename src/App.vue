@@ -4,6 +4,7 @@ import '@vuepic/vue-datepicker/dist/main.css'
 import moment from 'moment'
 import Modal from './components/Modal.vue'
 import EMT from './main.js'
+import xlsx from 'xlsx/dist/xlsx.full.min'
 
 </script>
 <template>
@@ -76,12 +77,22 @@ import EMT from './main.js'
          </div>
 
 
-         <div class="row justify-content-center">
-            <button v-on:click="dajDataAPI" type="button" class="btn btn-primary" style="width:100%;">
+         <div class="row row-cols-2">
+            <div class="col">
+            <button v-on:click="dajDataAPI" type="button" class="btn btn-primary me-0" style="width:100%">
                <span v-show="!loading"> ZOBRAZ DATA</span>
-               <span v-show="loading" class="spinner-border spinner-border me-2" style="vertical-align:middle"></span>
-               <span v-show="loading" role="status" style="vertical-align:middle">LOADING...</span>
+               <span v-show="loading" class="spinner-border spinner-border" style="vertical-align:middle"></span>
+               
+               <span v-show="loading" role="status" style="vertical-align:middle; margin-left:1rem">LOADING...</span>
             </button>
+            </div>
+            <div class="col">
+               <button @click.prevent="dajXLSXFromAPI" type="button" style="width:100%" class="col btn btn-success">
+                  <span v-show="!loadingXLSX">Export do XLSX</span>
+                  <span v-show="loadingXLSX" class="spinner-border spinner-border" style="vertical-align:middle"></span>
+                  <span v-show="loadingXLSX" role="status" style="vertical-align:middle; margin-left:1rem">LOADING...</span>
+               </button>
+            </div>
          </div>
 
          <a id="popoverButton" class="text-success mt-2" href="#" role="button" data-bs-toggle="popover" title="POZNAMKA"
@@ -162,6 +173,11 @@ export default {
    data() {
       const self = this;
       return {                  
+         framework:[
+            //["A1","B1","C1"],["A2","B2","C2"],["A3","B3","C3"]
+            {name:"George Washington", birthday: "1732-02-22"},
+            {name:"John Adams", birthday: "1735-10-19"},
+         ],                  
          dAnnotations:[],         
          zobraz: {
             frekvencia: true, /*mojVykon: true,*/ DBVykon: true, /*okamzitaSpotreba: true,*/ spotrebaZmien: true, napatie: true, prud: true, tlak: true,
@@ -170,6 +186,7 @@ export default {
          //zobraz: true,
          picked: "CUSTOM",
          loading: false,
+         loadingXLSX: false,
          spotreba_celkom: -99999.994,
          //tOD: new Date() - 30 * 60 * 1000, //odcitavaju sa MINUTY
          //tOD: new Date().setMinutes(new Date().getMinutes() - 30),
@@ -285,6 +302,24 @@ export default {
 
    //========================================== METHODS  =================================================
    methods: {          
+      
+      getXLSXFileName(){
+         
+         return "exportXLSX_" + this.parsujDatum(this.tOD) +"_"+ this.parsujDatum(this.tDO) +"_"+ this.myPec;
+
+      },
+      
+      exportToXLSX(dataJSON,pec){         
+         //console.log(this.getXLSXFileName());
+         const XLSX = xlsx;
+         const workbook = XLSX.utils.book_new();
+         //const worksheet = XLSX.utils.aoa_to_sheet(this.framework);
+         const worksheet = XLSX.utils.json_to_sheet(dataJSON); //this.framework
+         XLSX.utils.book_append_sheet(workbook,worksheet,pec);
+         var fileName = this.getXLSXFileName();
+         XLSX.writeFile(workbook,fileName+".XLSX");
+      },
+      
       //funkcia naplni zdielane pole, ktoreho obasah sa pouzije pre plugin k ChartJS packageu "annotation" 
       mGetArrAnnotations()
       {  
@@ -303,12 +338,116 @@ export default {
                this.dAnnotations.push(newANNOTATION);
          }  
          //console.log("dAnnotations: ", this.dAnnotations);
-      },      
+      },
+
       showModal(pTitle, pData, pOptions) {
          //console.log("Emitnuty globalny showModal");
          EMT.emit("showModal", pTitle, pData, pOptions);
          //this.myModalData = pData;
       },
+
+      dajXLSXFromAPI() {
+         console.warn("ODOSLANY XLS GET REQUEST NA SERVER");
+         
+         this.loadingXLSX = true;
+         this.inicializujOdDo();
+         //https://stackoverflow.com/questions/49257650/how-check-if-vue-is-in-development-mode
+         //if (import.meta.env.DEV)
+         var URL = "https://localhost:7117/record/intervalAll";
+         //else
+         //var URL = "http://192.168.45.1:2031/record/interval";
+         // var URL = "https://localhost:7117/record/interval?dateStart="+pOD+"&dateEnd="+pDO;
+         axios
+            //.get("https://localhost:7117/record/interval?dateStart=2023-10-16T12:00:00&dateEnd=2023-10-16T19:15:00")
+            //.get(URL)
+            .get(URL, {
+               params: {
+                  //dateStart: "2023-10-16T12:00:00",
+                  //dateEnd: "2023-10-16T19:10:00",
+                  dateStart: this.parsujDatum(this.tOD),
+                  dateEnd: this.parsujDatum(this.tDO),
+                  zmena: this.myZmena,
+                  pecId: this.myPec,
+               },
+            })
+
+            .then((response) => {
+                              
+               // SPOTREBA ZMIEN
+               // --------------------------------------------------------------------------------------------------------------------------------------
+               // console.info("DOSLI DATA ZO SERVERA \n [object Object] je jeden zaznam z DB \n");
+               // console.log(response.data);               
+               // --------------------------------------------------------------------------------------------------------------------------------------               
+               //CASOVA OS
+               //let reducedData = Helpers.RedukujPocetHodnot(response.data, 200);
+               const completeData = response.data;               
+               
+               console.log("############ Kompletny JSON ############");
+               console.log(completeData);
+               console.log("########################################");
+               
+               this.exportToXLSX(completeData,this.myPec);
+
+               const DatumCasXLSX = completeData.map(rec => this.parsujDatum(rec.dateTime));
+               //this.TimeBoundary = PomLabels;// Helpers.DodajKrajneHodnoty(new Date(PomLabels[0]), new Date(PomLabels[PomLabels.length - 1]));
+
+               //DB VYKON
+               const VykonXLSX = completeData.map(rec => rec.vykon);
+
+               //OKAMZITA SPOTREBA
+               // PomData = reducedData.map(rec => rec.spotreba);
+               
+               //NAPATIE
+               const NapatieXLSX = completeData.map(rec => rec.napatie);               
+
+               //PRUD
+               const PrudXLSX = completeData.map(rec => rec.prud);               
+
+               //TEPLOTA VODY
+               const TeplotaVodyVstupXLSX = completeData.map(rec => rec.tVodaVstup.toFixed(2)); 
+               const TeplotaVodyVystupXLSX = completeData.map(rec => rec.tVodaVystup.toFixed(2));
+                              
+               //TLAK
+               const TlakXLSX = completeData.map(rec => rec.tlak);               
+
+               //SOBERT VSTUP
+               const SobertVstupXLSX = completeData.map(rec => rec.sobertVstup);               
+
+               //SOBERT VYKON
+               const SobertVykonXLSX = completeData.map(rec => rec.sobertVykon);
+               
+               //RZPRISPOSOBENIE
+               const RzPrisposobenieXLSX = completeData.map(rec => rec.rzPribenie);               
+
+               //FREKVENCIA
+               const FrekvenciaXLSX = completeData.map(rec => rec.frekvencia);               
+
+               //PRIETOK
+               const PrietokXLSX = completeData.map(rec => rec.prietokVody);              
+               //-------------------------------------------------------------------------------------------------------------------------------------------------------
+               //TEPLOTA P1
+               const TeplotaP1XLSX = completeData.map(rec => rec.teplotaP1);               
+
+               //TEPLOTA P2
+               const TeplotaP2XLSX = completeData.map(rec => rec.teplotaP2);
+               
+               //TEPLOTA OKRUH
+               const TeplotaOkruhXLSX = completeData.map(rec => rec.teplotaOkruh);               
+               
+               //NA ZAVER UROBIM a VYKRESLIM (pomocou CP) ZMENU STAVU pola dAnnotations => 'reaktivny framework: REAGUJE NA ZMENU STAVU, KTORY JE DANY data(){} OBJEKTOM'
+               //this.mGetArrAnnotations();
+               
+               this.loadingXLSX = false;
+               //-------------------------------------------------------------------------------------------------------------------------------------------------------
+            })
+            .catch((error) => {
+               console.error(error);
+               this.loadingXLSX = false;
+            });
+      },
+      
+      
+      
       dajDataAPI() {
          console.warn("ODOSLANY GET REQUEST NA SERVER");
          // console.log(import.meta.env.DEV);
