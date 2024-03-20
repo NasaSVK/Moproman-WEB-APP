@@ -17,19 +17,19 @@ import xlsx from 'xlsx/dist/xlsx.full.min'
             <div class="form-check">
                <input class="form-check-input" type="radio" id="rdbTzden" value="WEEK" v-model="picked">
                <label class="form-check-label" for="rdbTzden">
-                  TYZDENNY
+                  TÝŽDENNÝ
                </label>
             </div>
             <div class="form-check">
                <input class="form-check-input" type="radio" id="rdbMesiac" value="MONTH" v-model="picked">
                <label class="form-check-label" for="rdbMesiac">
-                  MESACNY
+                  MESAČNÝ
                </label>
             </div>
             <div class="form-check">
                <input class="form-check-input" type="radio" id="rdbCustom" value="CUSTOM" v-model="picked">
                <label class="form-check-label" for="rdbCustom">
-                  VLASTNY
+                  VLASTNÝ
                </label>
             </div>
          </fieldset>
@@ -40,8 +40,8 @@ import xlsx from 'xlsx/dist/xlsx.full.min'
          </fieldset>
 
          <fieldset class="col mb-0 ps-1 mt-3">
-            <VueDatePicker :disabled="cp_disable_picker" id="dtpOD" class="picker mb-2" v-model="dpOD"></VueDatePicker>
-            <VueDatePicker :disabled="cp_disable_picker" id="dtpDO" class="picker mb-2" v-model="dpDO"></VueDatePicker>
+            <VueDatePicker :disabled="cp_disable_picker" id="dtpOD" class="picker mb-2" v-model="dpOD" :format="dateFormat"></VueDatePicker>
+            <VueDatePicker :disabled="cp_disable_picker" id="dtpDO" class="picker mb-2" v-model="dpDO" :format="dateFormat"></VueDatePicker>
          </fieldset>
 
          <!-- align-self-end -->
@@ -52,10 +52,10 @@ import xlsx from 'xlsx/dist/xlsx.full.min'
                <div class="col pe-0">
                   <!--div.col mam AUTOMATICKY VHDONY PADDING => vnorene elementy su pekne odsadene od okrajov -->
                   <select class="form-select form-control" id="slZmena" aria-label="Default select example" v-model="myZmena">
-                     <option value="VSETKY">VSETKY</option>
-                     <option value="ZMENA-1">RANNA</option>
-                     <option value="ZMENA-2">POOBEDNA</option>
-                     <option value="ZMENA-3">NOCNA</option>
+                     <option value="VSETKY">VŠETKY</option>
+                     <option value="ZMENA-1">RANNÁ</option>
+                     <option value="ZMENA-2">POOBEDNÁ</option>
+                     <option value="ZMENA-3">NOČNÁ</option>
                   </select>
                </div>
             </div>
@@ -80,7 +80,7 @@ import xlsx from 'xlsx/dist/xlsx.full.min'
          <div class="row row-cols-2">
             <div class="col">
             <button v-on:click="dajDataAPI" type="button" class="btn btn-primary me-0" style="width:100%">
-               <span v-show="!loading"> ZOBRAZ DATA</span>
+               <span v-show="!loading"> ZOBRAZ DÁTA</span>
                <span v-show="loading" class="spinner-border spinner-border" style="vertical-align:middle"></span>
                
                <span v-show="loading" role="status" style="vertical-align:middle; margin-left:1rem">LOADING...</span>
@@ -96,7 +96,7 @@ import xlsx from 'xlsx/dist/xlsx.full.min'
          </div>
 
          <a id="popoverButton" class="text-success mt-2" href="#" role="button" data-bs-toggle="popover" title="POZNAMKA"
-            data-bs-content="Realne namerane hodnoty su reprezentovane farebnymi kruhovymi bodmi. Sive linie medzi vykreslenymi bodmi su LEN odhadovene hodnoty veliciny v danom case">POZNAMKA</a>
+            data-bs-content="Reálne namerané hodnoty su reprezentované farebnými kruhovými bodmi. Sivé línie medzi vykreslenými bodmi sú LEN odhadovené hodnoty veličiny v danom čase.">POZNÁMKA</a>
       </div>
    </form>
 
@@ -107,7 +107,7 @@ import xlsx from 'xlsx/dist/xlsx.full.min'
             <MyBarChart :pChartData=myDataMojVykon :myChartOptions=myOptionsTimeComp v-on:click="showModal('POCITANY VYKON', myDataMojVykon, myOptionsTimeComp)"></MyBarChart>
          </div> -->
          <div class="chart col" v-show="zobraz.DBVykon">
-            <MyBarChart :pChartData=myDataDBVykon :myChartOptions=myOptionsTimeComp v-on:click="showModal('VYKON [kW]', myDataDBVykon, myOptionsTimeComp)"></MyBarChart>
+            <MyBarChart :pChartData=myDataDBVykon :myChartOptions=myOptionsTimeComp v-on:click="showModal('VÝKON [kW]', myDataDBVykon, myOptionsTimeComp)"></MyBarChart>
          </div>
          <!-- <div class="chart col" v-show="zobraz.okamzitaSpotreba">
             <MyBarChart :pChartData=myDataSpotreba :myChartOptions=myOptionsTimeComp v-on:click="showModal('OKAMZITA SPOTREBA', myDataSpotreba, myOptionsTimeComp)"></MyBarChart>
@@ -118,10 +118,10 @@ import xlsx from 'xlsx/dist/xlsx.full.min'
             <BarChart :pChartData="myDataSpotrebaBAR"></BarChart>
          </div>
          <div class="chart col" v-show="zobraz.napatie">
-            <MyBarChart :pChartData=myDataNapatie :myChartOptions=myOptionsTimeComp v-on:click="showModal('NAPATIE [V]', myDataNapatie, myOptionsTimeComp)"></MyBarChart>
+            <MyBarChart :pChartData=myDataNapatie :myChartOptions=myOptionsTimeComp v-on:click="showModal('NAPÄTIE [V]', myDataNapatie, myOptionsTimeComp)"></MyBarChart>
          </div>
          <div class="chart col" v-show="zobraz.prud">
-            <MyBarChart :pChartData=myDataPrud :myChartOptions=myOptionsTimeComp v-on:click="showModal('PRUD [A]', myDataPrud, myOptionsTimeComp)"></MyBarChart>
+            <MyBarChart :pChartData=myDataPrud :myChartOptions=myOptionsTimeComp v-on:click="showModal('PRÚD [A]', myDataPrud, myOptionsTimeComp)"></MyBarChart>
          </div>
          <div class="chart col" v-show="zobraz.teplotaVstup">
             <MyBarChart :pChartData=myDataVoda :myChartOptions=myOptionsTimeComp v-on:click="showModal('TEPLOTA VODY vstup / vystup [°C]', myDataVoda, myOptionsTimeComp)"></MyBarChart>
@@ -133,10 +133,10 @@ import xlsx from 'xlsx/dist/xlsx.full.min'
             <MyBarChart :pChartData=myDataSobertVstup :myChartOptions=myOptionsTimeComp v-on:click="showModal('SOBERT VSTUP [%]', myDataSobertVstup, myOptionsTimeComp)"></MyBarChart>
          </div>
          <div class="chart col" v-show="zobraz.sobertVykon">
-            <MyBarChart :pChartData=myDataSobertVykon :myChartOptions=myOptionsTimeComp v-on:click="showModal('SOBERT VYKON [kW]', myDataSobertVykon, myOptionsTimeComp)"></MyBarChart>
+            <MyBarChart :pChartData=myDataSobertVykon :myChartOptions=myOptionsTimeComp v-on:click="showModal('SOBERT VÝKON [kW]', myDataSobertVykon, myOptionsTimeComp)"></MyBarChart>
          </div>
          <div class="chart col" v-show="zobraz.rzPrisposobenie">
-            <MyBarChart :pChartData=myDataRzPrisposobenie :myChartOptions=myOptionsTimeComp v-on:click="showModal('RZ PRISPOSOBENIE [Ω]', myDataRzPrisposobenie, myOptionsTimeComp)"></MyBarChart>
+            <MyBarChart :pChartData=myDataRzPrisposobenie :myChartOptions=myOptionsTimeComp v-on:click="showModal('RZ PRISPÔSOBENIE [Ω]', myDataRzPrisposobenie, myOptionsTimeComp)"></MyBarChart>
          </div>
          <div class="chart col" v-show="zobraz.prietok">
             <MyBarChart :pChartData=myDataPrietok :myChartOptions=myOptionsTimeComp v-on:click="showModal('PRIETOK [l/min]', myDataPrietok, myOptionsTimeComp)"></MyBarChart>
@@ -146,7 +146,7 @@ import xlsx from 'xlsx/dist/xlsx.full.min'
          </div>
          <div class="chart col" v-show="zobraz.teplotaP1">
             <MyBarChart :pChartData=myDataTeplotaP1P2Okruh :myChartOptions=myOptionsTimeComp
-               v-on:click="showModal('TEPLOTA VODY pec1 / pec2 / (primarny okruh) [°C]', myDataTeplotaP1P2Okruh, myOptionsTimeComp)"></MyBarChart>
+               v-on:click="showModal('TEPLOTA VODY pec1 / pec2 / (primárny okruh) [°C]', myDataTeplotaP1P2Okruh, myOptionsTimeComp)"></MyBarChart>
          </div>         
       </div>
    </div>
@@ -242,7 +242,7 @@ export default {
          // },
          myDataDBVykon: {
             labels: [0],
-            datasets: [{ data: [0], label: "VYKON [kW]", backgroundColor: "#339933" }]
+            datasets: [{ data: [0], label: "VÝKON [kW]", backgroundColor: "#339933" }]
          },
          // myDataSpotreba: {
          //    labels: [0],
@@ -256,11 +256,11 @@ export default {
             //labels: [ 'January', 'February', 'March' ],
             //datasets: [ { data: [40, 20, 12] } ]
             labels: [0],
-            datasets: [{ data: [0], label: "NAPATIE [V]", backgroundColor: "#f87979" }]
+            datasets: [{ data: [0], label: "NAPÄTIE [V]", backgroundColor: "#f87979" }]
          },
          myDataPrud: {
             labels: [0],
-            datasets: [{ data: [0], label: "PRUD [A]", backgroundColor: "#0066ff" }]
+            datasets: [{ data: [0], label: "PRÚD [A]", backgroundColor: "#0066ff" }]
          },
          myDataTlak: {
             labels: [0],
@@ -272,7 +272,7 @@ export default {
          },
          myDataSobertVykon: {
             labels: [0],
-            datasets: [{ data: [0], label: "Sobert VYKON [kW]", backgroundColor: "#ffcc99" }]
+            datasets: [{ data: [0], label: "Sobert VÝKON [kW]", backgroundColor: "#ffcc99" }]
          },
          myDataVoda: {
             labels: [0],
@@ -284,7 +284,7 @@ export default {
          },
          myDataRzPrisposobenie: {
             labels: [0],
-            datasets: [{ data: [0], label: "RZPrisposobenie [Ω]", backgroundColor: "#804000" }]
+            datasets: [{ data: [0], label: "RZ PRISPÔSOBENIE [Ω]", backgroundColor: "#804000" }]
          },
          myDataPrietok: {
             labels: [0],
@@ -303,9 +303,19 @@ export default {
    //========================================== METHODS  =================================================
    methods: {          
       
+      dateFormat(date){
+         const day = date.getDate();
+         const month = date.getMonth() + 1;
+         const year = date.getFullYear();
+         const hour = date.getHours();
+         const minute = date.getMinutes();
+         return moment(date).format("DD.MM.YYYY HH:mm");
+         return `${day}.${month}.${year}, ${hour}:${minute}`;
+      },
+      
       getXLSXFileName(){
          
-         return "exportXLSX_" + this.parsujDatum(this.tOD) +"_"+ this.parsujDatum(this.tDO) +"_"+ this.myPec;
+         return "export_" + this.myPec +"_"+this.parsujDatum(this.tOD) +"_"+ this.parsujDatum(this.tDO);
 
       },
       
@@ -353,7 +363,7 @@ export default {
          this.inicializujOdDo();
          //https://stackoverflow.com/questions/49257650/how-check-if-vue-is-in-development-mode
          //if (import.meta.env.DEV)
-         var URL = "https://localhost:7117/record/intervalAll";
+         var URL = "http://192.168.45.1:2033/record/intervalAll";
          //else
          //var URL = "http://192.168.45.1:2031/record/interval";
          // var URL = "https://localhost:7117/record/interval?dateStart="+pOD+"&dateEnd="+pDO;
@@ -461,7 +471,7 @@ export default {
          //if (import.meta.env.DEV)
          //var URL = "https://localhost:7117/record/interval";
          //else
-         var URL = "http://192.168.45.1:2031/record/interval";
+         var URL = "http://192.168.45.1:2033/record/interval";
          // var URL = "https://localhost:7117/record/interval?dateStart="+pOD+"&dateEnd="+pDO;
          axios
             //.get("https://localhost:7117/record/interval?dateStart=2023-10-16T12:00:00&dateEnd=2023-10-16T19:15:00")
@@ -493,7 +503,7 @@ export default {
                   this.spotreba_celkom += total / KWH;
                   return total / KWH;
                })
-               PomLabels = ["RANNA", "DENNA", "NOCNA"]
+               PomLabels = ["RANNÁ", "DENNÁ", "NOČNÁ"]
                console.log("total:{0}", PomData);
                this.myDataSpotrebaBAR = { labels: PomLabels, datasets: [{ data: PomData, label: "SPOTREBA ZMIEN [kWh]", backgroundColor: "#ff944d" }] }
                // --------------------------------------------------------------------------------------------------------------------------------------
@@ -509,7 +519,7 @@ export default {
 
                //DB VYKON
                PomData = reducedData.map(rec => rec.vykon);
-               this.myDataDBVykon = { labels: PomLabels, datasets: [{ data: PomData, label: "VYKON [kW]", backgroundColor: "#339933" }] }
+               this.myDataDBVykon = { labels: PomLabels, datasets: [{ data: PomData, label: "VÝKON [kW]", backgroundColor: "#339933" }] }
 
                //OKAMZITA SPOTREBA
                // PomData = reducedData.map(rec => rec.spotreba);
@@ -517,11 +527,11 @@ export default {
 
                //NAPATIE
                PomData = reducedData.map(rec => rec.napatie);
-               this.myDataNapatie = { labels: PomLabels, datasets: [{ data: PomData, label: "NAPATIE [V]", backgroundColor: "#f87979" }] }
+               this.myDataNapatie = { labels: PomLabels, datasets: [{ data: PomData, label: "NAPÄTIE [V]", backgroundColor: "#f87979" }] }
 
                //PRUD
                PomData = reducedData.map(rec => rec.prud);
-               this.myDataPrud = { labels: PomLabels, datasets: [{ data: PomData, label: "PRUD [A]", backgroundColor: "#0066ff" }] }
+               this.myDataPrud = { labels: PomLabels, datasets: [{ data: PomData, label: "PRÚD [A]", backgroundColor: "#0066ff" }] }
 
                //TEPLOTA VODY
                PomData = reducedData.map(rec => rec.tVodaVstup.toFixed(2)); let PomData1 = reducedData.map(rec => rec.tVodaVystup.toFixed(2));
@@ -540,11 +550,11 @@ export default {
 
                //SOBERT VYKON
                PomData = reducedData.map(rec => rec.sobertVykon);
-               this.myDataSobertVykon = { labels: PomLabels, datasets: [{ data: PomData, label: "SOBERT VYKON  [kW]", backgroundColor: "#ffcc99" }] }
+               this.myDataSobertVykon = { labels: PomLabels, datasets: [{ data: PomData, label: "SOBERT VÝKON  [kW]", backgroundColor: "#ffcc99" }] }
 
                //RZPRISPOSOBENIE
                PomData = reducedData.map(rec => rec.rzPribenie);
-               this.myDataRzPrisposobenie = { labels: PomLabels, datasets: [{ data: PomData, label: "RZ Prisposobenie [Ω]", backgroundColor: "#804000" }] }
+               this.myDataRzPrisposobenie = { labels: PomLabels, datasets: [{ data: PomData, label: "RZ PRISPÔSOBENIE [Ω]", backgroundColor: "#804000" }] }
 
                //FREKVENCIA
                PomData = reducedData.map(rec => rec.frekvencia);
