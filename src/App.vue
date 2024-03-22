@@ -519,7 +519,7 @@ export default {
 
                //DB VYKON
                PomData = reducedData.map(rec => rec.vykon);
-               this.myDataDBVykon = { labels: PomLabels, datasets: [{ data: PomData, label: "VÝKON [kW]", backgroundColor: "#339933" }] }
+               this.myDataDBVykon = { labels: PomLabels, datasets: [{ data: PomData, label: "VÝKON [kW]", backgroundColor: "#339933", borderWidth:"1" }] }
 
                //OKAMZITA SPOTREBA
                // PomData = reducedData.map(rec => rec.spotreba);
@@ -527,60 +527,60 @@ export default {
 
                //NAPATIE
                PomData = reducedData.map(rec => rec.napatie);
-               this.myDataNapatie = { labels: PomLabels, datasets: [{ data: PomData, label: "NAPÄTIE [V]", backgroundColor: "#f87979" }] }
+               this.myDataNapatie = { labels: PomLabels, datasets: [{ data: PomData, label: "NAPÄTIE [V]", backgroundColor: "#f87979", borderWidth:"1" }] }
 
                //PRUD
                PomData = reducedData.map(rec => rec.prud);
-               this.myDataPrud = { labels: PomLabels, datasets: [{ data: PomData, label: "PRÚD [A]", backgroundColor: "#0066ff" }] }
+               this.myDataPrud = { labels: PomLabels, datasets: [{ data: PomData, label: "PRÚD [A]", backgroundColor: "#0066ff", borderWidth:"1" }] }
 
                //TEPLOTA VODY
                PomData = reducedData.map(rec => rec.tVodaVstup.toFixed(2)); let PomData1 = reducedData.map(rec => rec.tVodaVystup.toFixed(2));
                this.myDataVoda = {
-                  labels: PomLabels, datasets: [{ data: PomData, label: "VODA VSTUP [°C]", backgroundColor: "#9933ff" },
-                  { data: PomData1, label: "VODA VYSTUP [°C]", backgroundColor: "#ff6600" }]
+                  labels: PomLabels, datasets: [{ data: PomData, label: "VODA VSTUP [°C]", backgroundColor: "#9933ff", borderWidth:"1" },
+                  { data: PomData1, label: "VODA VYSTUP [°C]", backgroundColor: "#ff6600", borderWidth:"1" }]
                }
 
                //TLAK
                PomData = reducedData.map(rec => rec.tlak);
-               this.myDataTlak = { labels: PomLabels, datasets: [{ data: PomData, label: "TLAK VODY [Pa]", backgroundColor: "#000000" }] }
+               this.myDataTlak = { labels: PomLabels, datasets: [{ data: PomData, label: "TLAK VODY [Pa]", backgroundColor: "#000000", borderWidth:"1" }] }
 
                //SOBERT VSTUP
                PomData = reducedData.map(rec => rec.sobertVstup);
-               this.myDataSobertVstup = { labels: PomLabels, datasets: [{ data: PomData, label: "SOBERT VSTUP [%]", backgroundColor: "#ffcccc" }] }
+               this.myDataSobertVstup = { labels: PomLabels, datasets: [{ data: PomData, label: "SOBERT VSTUP [%]", backgroundColor: "#ffcccc", borderWidth:"1" }] }
 
                //SOBERT VYKON
                PomData = reducedData.map(rec => rec.sobertVykon);
-               this.myDataSobertVykon = { labels: PomLabels, datasets: [{ data: PomData, label: "SOBERT VÝKON  [kW]", backgroundColor: "#ffcc99" }] }
+               this.myDataSobertVykon = { labels: PomLabels, datasets: [{ data: PomData, label: "SOBERT VÝKON  [kW]", backgroundColor: "#ffcc99", borderWidth:"1" }] }
 
                //RZPRISPOSOBENIE
                PomData = reducedData.map(rec => rec.rzPribenie);
-               this.myDataRzPrisposobenie = { labels: PomLabels, datasets: [{ data: PomData, label: "RZ PRISPÔSOBENIE [Ω]", backgroundColor: "#804000" }] }
+               this.myDataRzPrisposobenie = { labels: PomLabels, datasets: [{ data: PomData, label: "RZ PRISPÔSOBENIE [Ω]", backgroundColor: "#804000", borderWidth:"1" }] }
 
                //FREKVENCIA
                PomData = reducedData.map(rec => rec.frekvencia);
-               this.myDataFrekvencia = { labels: PomLabels, datasets: [{ data: PomData, label: "FREKVENCIA [Hz]", backgroundColor: "#cc3300" }] }
+               this.myDataFrekvencia = { labels: PomLabels, datasets: [{ data: PomData, label: "FREKVENCIA [Hz]", backgroundColor: "#cc3300", borderWidth:"1" }] }
 
                //PRIETOK
                PomData = reducedData.map(rec => rec.prietokVody);
-               this.myDataPrietok = { labels: PomLabels, datasets: [{ data: PomData, label: "PRIETOK [l/min]", backgroundColor: "#3399ff" }] }
+               this.myDataPrietok = { labels: PomLabels, datasets: [{ data: PomData, label: "PRIETOK [l/min]", backgroundColor: "#3399ff", borderWidth:"1" }] }
 
                //-------------------------------------------------------------------------------------------------------------------------------------------------------
                //TEPLOTA P1
                PomData = reducedData.map(rec => rec.teplotaP1);
-               this.myDataTeplotaP1 = { labels: PomLabels, datasets: [{ data: PomData, label: "TEPLOTA P1 [°C]", backgroundColor: "#ff6666" }] }
+               this.myDataTeplotaP1 = { labels: PomLabels, datasets: [{ data: PomData, label: "TEPLOTA P1 [°C]", backgroundColor: "#ff6666", borderWidth:"1" }] }
 
                //TEPLOTA P2
                PomData1 = reducedData.map(rec => rec.teplotaP2);
-               this.myDataTeplotaP2 = { labels: PomLabels, datasets: [{ data: PomData1, label: "TEPLOTA P2 [°C]", backgroundColor: "#d65cad" }] }
+               this.myDataTeplotaP2 = { labels: PomLabels, datasets: [{ data: PomData1, label: "TEPLOTA P2 [°C]", backgroundColor: "#d65cad", borderWidth:"1" }] }
 
                //TEPLOTA OKRUH
                let PomData2 = reducedData.map(rec => rec.teplotaOkruh);
-               this.myDataTeplotaOkruh = { labels: PomLabels, datasets: [{ data: PomData2, label: "TEPLOTA OKRUH [°C]", backgroundColor: "#d24dff" }] }
+               this.myDataTeplotaOkruh = { labels: PomLabels, datasets: [{ data: PomData2, label: "TEPLOTA OKRUH [°C]", backgroundColor: "#d24dff", borderWidth:"1" }] }
 
                //TEPLOTA P1+P2+OKRUH
                this.myDataTeplotaP1P2Okruh = {
-                  labels: PomLabels, datasets: [{ data: PomData, label: "TEPLOTA P1 [°C]", backgroundColor: "#ff6666" },
-                  { data: PomData1, label: "TEPLOTA P2 [°C]", backgroundColor: "#d65cad" }, { data: PomData2, label: "TEPLOTA OKRUH [°C]", backgroundColor: "#9933ff" }]
+                  labels: PomLabels, datasets: [{ data: PomData, label: "TEPLOTA P1 [°C]", backgroundColor: "#ff6666", borderWidth:"1" },
+                  { data: PomData1, label: "TEPLOTA P2 [°C]", backgroundColor: "#d65cad", borderWidth:"1" }, { data: PomData2, label: "TEPLOTA OKRUH [°C]", backgroundColor: "#9933ff", borderWidth:"1" }]
                }
                
                //NA ZAVER UROBIM a VYKRESLIM (pomocou CP) ZMENU STAVU pola dAnnotations => 'reaktivny framework: REAGUJE NA ZMENU STAVU, KTORY JE DANY data(){} OBJEKTOM'

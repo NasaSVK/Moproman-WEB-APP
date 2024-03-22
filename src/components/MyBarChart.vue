@@ -92,6 +92,7 @@ export default {
     myChartOptions: {
       type: Object,
       default: {
+        borderWidth: 1,
         responsive: true,
         maintainAspectRatio: false,
         plugins: {
